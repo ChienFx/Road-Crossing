@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\CPeople">
+      <UniqueIdentifier>{052b9850-ced0-4f1c-8a56-bd66dce4711f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CVehicle">
+      <UniqueIdentifier>{203b4e73-119b-49c9-acf4-a590d80ebf54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CGame">
+      <UniqueIdentifier>{9484c08b-73e1-45da-a4cf-9f48603672a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CAnimal">
+      <UniqueIdentifier>{d7228ba9-d4ed-4720-a288-8c06709c369f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CVehicle\CTruck">
+      <UniqueIdentifier>{65b534cf-da3e-4412-806f-ffd57348d58d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CAnimal\CBird">
+      <UniqueIdentifier>{0f2b6681-9779-4845-afa9-6f2c3e18a9dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CVehicle\Car">
+      <UniqueIdentifier>{fc0520ae-9a99-4000-a911-dd39d7d0efc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CAnimal\Dinosaur">
+      <UniqueIdentifier>{1233971d-2270-4068-a6e1-203290185f6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Traffic">
+      <UniqueIdentifier>{6c2f7d44-da0f-4839-9a78-fced613dcd44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="People.h">
+      <Filter>Source Files\CPeople</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle.h">
+      <Filter>Source Files\CVehicle</Filter>
+    </ClInclude>
+    <ClInclude Include="Truck.h">
+      <Filter>Source Files\CVehicle\CTruck</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Source Files\CGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Animal.h">
+      <Filter>Source Files\CAnimal</Filter>
+    </ClInclude>
+    <ClInclude Include="Bird.h">
+      <Filter>Source Files\CAnimal\CBird</Filter>
+    </ClInclude>
+    <ClInclude Include="MyLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Car.h">
+      <Filter>Source Files\CVehicle\Car</Filter>
+    </ClInclude>
+    <ClInclude Include="Dinosaur.h">
+      <Filter>Source Files\CAnimal\Dinosaur</Filter>
+    </ClInclude>
+    <ClInclude Include="Traffic.h">
+      <Filter>Source Files\Traffic</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="People.cpp">
+      <Filter>Source Files\CPeople</Filter>
+    </ClCompile>
+    <ClCompile Include="main_prg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle.cpp">
+      <Filter>Source Files\CVehicle</Filter>
+    </ClCompile>
+    <ClCompile Include="Truck.cpp">
+      <Filter>Source Files\CVehicle\CTruck</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\CGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Animal.cpp">
+      <Filter>Source Files\CAnimal</Filter>
+    </ClCompile>
+    <ClCompile Include="Bird.cpp">
+      <Filter>Source Files\CAnimal\CBird</Filter>
+    </ClCompile>
+    <ClCompile Include="MyLib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dinosaur.cpp">
+      <Filter>Source Files\CAnimal\Dinosaur</Filter>
+    </ClCompile>
+    <ClCompile Include="Car.cpp">
+      <Filter>Source Files\CVehicle\Car</Filter>
+    </ClCompile>
+    <ClCompile Include="Traffic.cpp">
+      <Filter>Source Files\Traffic</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE -->
+<html data-n-head=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style class="vjs-styles-defaults">
+      .video-js {
+        width: 300px;
+        height: 150px;
+      }
+
+      .vjs-fluid {
+        padding-top: 56.25%
+      }
+    </style>
+    <meta data-n-head="true" name="viewport" content="width=device-width, initial-scale=1"><meta data-n-head="true" http-equiv="X-UA-Compatible" content="IE=edge"><meta data-n-head="true" name="application-name" content="Viblo"><meta data-n-head="true" property="og:site_name" content="Viblo"><meta data-n-head="true" property="og:title" content="Viblo | Free service for technical knowledge sharing"><meta data-n-head="true" property="og:description" content="Technology Articles Platform from Asia, filled with latest information on Programming Languages and Frameworks. Ruby on Rails / PHP / Swift / Unity / Java /.Net"><meta data-n-head="true" name="google-site-verification" content="RKTOz1S8uxhAZHqaOsf6cSvT_pqnPHEyAnlTnlLiiok"><meta data-n-head="true" name="msapplication-TileColor" content="#FFFFFF"><meta data-n-head="true" name="msapplication-TileImage" content="/mstile-144x144.png"><meta data-n-head="true" name="msapplication-square70x70logo" content="/mstile-70x70.png"><meta data-n-head="true" name="msapplication-square150x150logo" content="/mstile-150x150.png"><meta data-n-head="true" name="msapplication-wide310x150logo" content="/mstile-310x150.png"><meta data-n-head="true" name="msapplication-square310x310logo" content="/mstile-310x310.png"><meta data-n-head="true" data-hid="description" name="description" content="Dạo này loanh quanh nghe thấy từ multipe thread hơi nhiều. Từ những bài seminar đến trong project hiện tại cũng có nhiều vấn đề liên quan. Về cơ bản mình cũng không phải cao thủ gì, tuỳ nhiên cũng muốn lọ mọ 1 chút gọi là góp vui :D.. Mình làm về mobile, chủ yếu là 2 mảng Android + IOS. Nên đương nhiên là dù có viết gì, tìm hiểu cái gì thì mục đích chính vẫn là phục vụ cho 2 nền tảng này. Và về cơ bản thì thằng nào cũng có cái gốc gác từ thằng C, vì thế quyết định chiến từ gốc lên cho máu.. Đáng lẽ ra thì phải viết về posix threads Bởi nó mới là thằng phục vụ chính cho các platform. Tuy nhiên code C thì có vẻ khó đọc hơn C++, hơn nữa Ubuntu với Mac là đủ để demo, mà về cơ bản thì cơ chế của..."><meta data-n-head="true" data-hid="keywords" name="keywords" content="iOS, Android, C++"><meta data-n-head="true" property="og:title" content="Làm quen với Multithreading Trong C++"><meta data-n-head="true" property="og:description" content="Dạo này loanh quanh nghe thấy từ multipe thread hơi nhiều. Từ những bài seminar đến trong project hiện tại cũng có nhiều vấn đề liên quan. Về cơ bản mình cũng không phải cao thủ gì, tuỳ nhiên cũng muốn lọ mọ 1 chút gọi là góp vui :D.. Mình làm về mobile, chủ yếu là 2 mảng Android + IOS. Nên đương nhiên là dù có viết gì, tìm hiểu cái gì thì mục đích chính vẫn là phục vụ cho 2 nền tảng này. Và về cơ bản thì thằng nào cũng có cái gốc gác từ thằng C, vì thế quyết định chiến từ gốc lên cho máu.. Đáng lẽ ra thì phải viết về posix threads Bởi nó mới là thằng phục vụ chính cho các platform. Tuy nhiên code C thì có vẻ khó đọc hơn C++, hơn nữa Ubuntu với Mac là đủ để demo, mà về cơ bản thì cơ chế của..."><meta data-n-head="true" property="og:locale" content=""><meta data-n-head="true" property="og:type" content="article"><meta data-n-head="true" property="og:url" content="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE"><meta data-n-head="true" property="og:site_name" content="Viblo"><meta data-n-head="true" property="og:image" content="https://viblo.asia/og-facebook-2.png"><meta data-n-head="true" property="og:width" content="1200"><meta data-n-head="true" property="og:height" content="630"><meta data-n-head="true" data-hid="article:published_time" name="article:published_time" content=""><meta data-n-head="true" data-hid="article:modified_time" name="article:modified_time" content=""><meta data-n-head="true" data-hid="article:author" name="article:author" content=""><meta data-n-head="true" data-hid="article:tag" name="article:tag" content="iOS, Android, C++"><meta data-n-head="true" data-hid="twitter:title" name="twitter:title" content="Làm quen với Multithreading Trong C++"><meta data-n-head="true" data-hid="twitter:description" name="twitter:description" content="Dạo này loanh quanh nghe thấy từ multipe thread hơi nhiều. Từ những bài seminar đến trong project hiện tại cũng có nhiều vấn đề liên quan. Về cơ bản mình cũng không phải cao thủ gì, tuỳ nhiên cũng muốn lọ mọ 1 chút gọi là góp vui :D.. Mình làm về mobile, chủ yếu là 2 mảng Android + IOS. Nên đương nhiên là dù có viết gì, tìm hiểu cái gì thì mục đích chính vẫn là phục vụ cho 2 nền tảng này. Và về cơ bản thì thằng nào cũng có cái gốc gác từ thằng C, vì thế quyết định chiến từ gốc lên cho máu.. Đáng lẽ ra thì phải viết về posix threads Bởi nó mới là thằng phục vụ chính cho các platform. Tuy nhiên code C thì có vẻ khó đọc hơn C++, hơn nữa Ubuntu với Mac là đủ để demo, mà về cơ bản thì cơ chế của..."><meta data-n-head="true" data-hid="twitter:card" name="twitter:card" content="summary"><title data-n-head="true">Làm quen với Multithreading Trong C++ - Viblo</title><link data-n-head="true" rel="alternate" type="application/rss+xml" name="Viblo RSS Feed" href="https://viblo.asia/rss"><link data-n-head="true" rel="stylesheet" href="./Làm quen với Multithreading Trong C++ - Viblo_files/css"><link data-n-head="true" rel="stylesheet" href="./Làm quen với Multithreading Trong C++ - Viblo_files/font-awesome.min.css"><link data-n-head="true" rel="stylesheet" href="./Làm quen với Multithreading Trong C++ - Viblo_files/emojione-sprite-32.min.css"><link data-n-head="true" rel="icon" type="image/x-icon" href="https://viblo.asia/favicon.ico"><link data-n-head="true" rel="apple-touch-icon-precomposed" sizes="57x57" href="https://viblo.asia/apple-touch-icon-57x57.png"><link data-n-head="true" rel="apple-touch-icon-precomposed" sizes="114x114" href="https://viblo.asia/apple-touch-icon-114x114.png"><link data-n-head="true" rel="apple-touch-icon-precomposed" sizes="72x72" href="https://viblo.asia/apple-touch-icon-72x72.png"><link data-n-head="true" rel="apple-touch-icon-precomposed" sizes="144x144" href="https://viblo.asia/apple-touch-icon-144x144.png"><link data-n-head="true" rel="apple-touch-icon-precomposed" sizes="60x60" href="https://viblo.asia/apple-touch-icon-60x60.png"><link data-n-head="true" rel="apple-touch-icon-precomposed" sizes="120x120" href="https://viblo.asia/apple-touch-icon-120x120.png"><link data-n-head="true" rel="apple-touch-icon-precomposed" sizes="76x76" href="https://viblo.asia/apple-touch-icon-76x76.png"><link data-n-head="true" rel="apple-touch-icon-precomposed" sizes="152x152" href="https://viblo.asia/apple-touch-icon-152x152.png"><link data-n-head="true" rel="icon" type="image/png" href="https://viblo.asia/favicon-196x196.png" sizes="196x196"><link data-n-head="true" rel="icon" type="image/png" href="https://viblo.asia/favicon-96x96.png" sizes="96x96"><link data-n-head="true" rel="icon" type="image/png" href="https://viblo.asia/favicon-32x32.png" sizes="32x32"><link data-n-head="true" rel="icon" type="image/png" href="https://viblo.asia/favicon-16x16.png" sizes="16x16"><link data-n-head="true" rel="icon" type="image/png" href="https://viblo.asia/favicon-128.png" sizes="128x128"><link data-n-head="true" rel="canonical" href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE"><link rel="preload" href="./Làm quen với Multithreading Trong C++ - Viblo_files/manifest.a939af43c1780d485b20.js.tải xuống" as="script"><link rel="preload" href="./Làm quen với Multithreading Trong C++ - Viblo_files/common.59417fa3cc00f2be4d6a.js.tải xuống" as="script"><link rel="preload" href="./Làm quen với Multithreading Trong C++ - Viblo_files/app.ca72fae92302ebf7d3e7.js.tải xuống" as="script"><link rel="preload" href="./Làm quen với Multithreading Trong C++ - Viblo_files/common.5e19c90ba20ffee4629c92c80055ae86.css" as="style"><link rel="preload" href="./Làm quen với Multithreading Trong C++ - Viblo_files/_post.128761e523d1718817aa.js.tải xuống" as="script"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index.10fbaf8715787da58440.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/settings.85a654577749cf01743b.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/settings/socials.9f04e1de59c39f0c2b11.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/tags/index.c69da655cf569dd25c21.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/series/index.90024fd3adbee6cf93ff.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/settings/index.d78a8fdce5153224d9bb.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/trending-logs.fa1f786299048e4e6c0f.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/layouts/faded.8785e29d4928ca6cdf6c.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/layouts/fluid.4c2484bb938519963668.js"><link rel="prefetch" href="./Làm quen với Multithreading Trong C++ - Viblo_files/default.cfe237fcdce788b134e2.js.tải xuống"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/tag-duplicates.00675924e9a56e83c1ca.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/editors.d41ec1132989aafa99fa.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/roles.8def3cb88d3c3fd5235b.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/comments.cd3525360f679b1d33ff.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/ml-logs/index.675e02644c904457be49.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/faq.5c788ae02f678d0cf437.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/q/_question.28c5ab95df60cb2431b1.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/layouts/admin.69d1165c14b9eb4c69fd.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/series/_series/edit.d6e5040337932f1719d6.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/series/_hashId/edit.9fabbdaa0457c21d01bb.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/questions/_feed.0bd45c55c3e7c3bf18c2.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/publish/video.c0643820439f0f910aeb.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/publish/post.b1980ed515754254b05a.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/posts/_post/edit.2e132daad12d9e01e91a.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/posts/edit/_post.dfadb07088e636f4e994.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/questions/ask.3ff6c141ac75579ef721.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/questions/_hashId/edit.9591ce5a1f1348c952d7.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/u/_user/clips/_clip.37412dad3f4703ba8da3.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/clip/_clip.ea5309c9e340e395c883.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/u/_user.5c74c0955a081095334c.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/search.24ea1e4575b6561bda65.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/videos.023912bd2d5facc6d6c7.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/trending.4828a003997a408c9b1f.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/translation.91a3d1d9ccfcb0720205.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/newest.cb3af9d373bbb526e1e4.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/index.805b9700a4e64abbccec.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/followings.61b60e53b0058a54d104.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/editors-choice.74f101323820d1202d6a.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/announcements.4ea8c8b8f7792d02f2b8.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/u/_user/_tab.2bc6dc4270d543d0cee8.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/tags/_tag/index.b8e6f0cd4f6570e7e7c4.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/ga-statistics.72a9e8dc7bec65684436.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/tags/_tag/questions.d2e4fd741c37e987dc75.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/u/_user/questions.52cca275f3ed3995c3c0.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/u/_user/series.9a259420ddb04680dde2.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/tags/_tag/series.7eb134e64aafe09a605e.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/index/series.ba02843310b3f1703a57.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/rankings/index.c914289887fc699ebef2.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/settings/oauth.9bd4d40c5acbf1b47bae.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/settings/images.d5a0e33a86fca16bdd19.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/mail-statistics.6abb9b6498c930886d2c.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/helps/_post.776272d545d273505854.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/announcements/_post.3f49d1cb0f29600465f4.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/authors.96c8275c85f43be76519.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/index.e48b48a1ed90622efce9.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/activities.766e9a92a1ee53ce928c.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/terms/vi.da6798939d97e2f5603e.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/terms/index.647d321c19a21cb7c1c3.js"><link rel="prefetch" href="https://viblo.asia/_nuxt/pages/admin/ctr.569098cc1641fe79ac44.js"><link rel="stylesheet" href="./Làm quen với Multithreading Trong C++ - Viblo_files/common.5e19c90ba20ffee4629c92c80055ae86.css"><style data-vue-ssr-id="6c39bc37:0 258ad83b:0 3516e924:0 b68384be:0 c808d700:0 7071f7c4:0 26e3a01c:0 6a935f9a:0 c5ffc9aa:0 47dda7e2:0 61d93de4:0 7ffff6ce:0 457796b2:0 e0204a72:0 c49e524e:0 4ca6681e:0 a921d472:0 54a77dff:0 18c396db:0 394d8474:0 9acc844a:0 227c9d7c:0 21ad42ef:0 4e4368c7:0 6dd00604:0 371c2db0:0 3beac150:0 638c42e0:0 91028890:0">#main-content{margin-top:60px;-webkit-box-flex:1;-ms-flex:1;flex:1}#app-container{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;min-height:100vh}
+#main-navbar{box-shadow:0 4px 4px 0 rgba(0,0,0,.1);height:60px;background-color:#fff}#main-navbar .container-fluid{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-ms-flex-wrap:nowrap;flex-wrap:nowrap;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}#main-navbar .navbar-brand{padding-top:4px;font-size:.875rem}#main-navbar .navbar-brand>img{height:1.5em}#main-navbar .main-menu .nav-item{margin-right:1.5rem}#main-navbar .main-menu .nav-item:last-child{margin-right:0}#main-navbar .main-menu .nav-item.active>a{color:#0b1a33}#main-navbar .main-menu .nav-item+.nav-item{margin-left:1rem}#main-navbar .main-menu .nav-link{font-weight:700;color:#9b9b9b;padding:0}#main-navbar .main-menu .nav-link:active,#main-navbar .main-menu .nav-link:hover{color:#0b1a33}#main-navbar .navbar-right .nav-item{margin-left:1rem}#main-navbar .navbar-right .nav-item .dropdown-badge{cursor:pointer}#main-navbar .navbar-right .nav-item .dropdown-toogle{position:relative}#main-navbar .nav-container{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}#main-navbar ul.nav-items{display:-webkit-box;display:-ms-flexbox;display:flex;padding-left:0;margin-bottom:0;list-style:none}.nav-user img{width:40px;height:40px;border-radius:50%}.nav-icon{color:#9b9b9b;font-size:1.5em}.nav-icon:focus,.nav-icon:hover{color:rgba(0,0,0,.7)}.publish-dropdown .blank-hover-field{width:50%;height:38px;margin-top:-38px;float:right;cursor:pointer}#main-search-form{position:relative}#main-search-form input{outline:none;line-height:1;min-width:28rem;padding:.65rem calc(45px + 1.5rem) .65rem 1.5rem;border-radius:3px;border:2px solid #d6d6d7}#main-search-form input:focus{border-color:#5488c7}#main-search-form .autocomplete+.btn,#main-search-form .autocomplete .btn{top:0;right:0;height:100%;position:absolute;border-top-left-radius:0;border-bottom-left-radius:0}#main-search-form .loading+.btn{display:none!important;width:45px}
+.dropdown-btn,.v-dropdown{position:relative}.dropdown-btn{cursor:pointer;margin-left:1rem;top:2px}@media screen and (min-width:992px){.dropdown-btn{display:none}}.main-menu-responsive[area-show=true]{display:-webkit-box!important;display:-ms-flexbox!important;display:flex!important;top:auto;margin-top:.5rem;position:absolute;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;background:#fff;box-shadow:1px 1px 3px 0 rgba(0,0,0,.6);left:1rem}.main-menu-responsive[area-show=true] .nav-item{margin:0!important;padding:.5rem 1rem;border-bottom:1px solid #dbe3e8}.main-menu-responsive[area-show=true] .nav-item:last-child{border-bottom:none}
+.autocomplete{position:relative}.autocomplete .fa.searchbox-icon{top:13px;right:13px;position:absolute;color:#9b9b9b}.autocomplete .fa.searchbox-icon.clear-input{right:55px;cursor:pointer}.autocomplete-suggestion{right:0;width:100%;z-index:99;margin-top:0;overflow-y:auto;position:absolute;background-color:#fff;max-height:calc(100vh - 80px);border:1px solid #9b9b9b;list-style:none;padding:0}.autocomplete-suggestion>.suggestion-item{padding:10px}.autocomplete-suggestion>.suggestion-item.highlight{cursor:pointer;color:#fff;background-color:#5488c7}.autocomplete-suggestion .suggestion-group{margin-bottom:1rem}.autocomplete-suggestion .suggestion-group-name{color:#fff;padding:10px;font-weight:700;text-transform:uppercase;background-color:#5488c7}.autocomplete-suggestion .suggestion-group .suggestion-item{padding:10px;border-bottom:1px dashed #d6d6d7}.autocomplete-suggestion .suggestion-group .suggestion-item:hover{background-color:#fafafa}.autocomplete-suggestion .suggestion-group .suggestion-item b{color:#5488c7!important}.autocomplete-suggestion .suggestion-group>.suggestion-item:last-child{border-bottom:none}.autocomplete-suggestion>.suggestion-group:last-child{margin-bottom:0}.suggestion-has-image{-webkit-box-align:center;-ms-flex-align:center;align-items:center}.suggestion-has-image,.suggestion-stats{display:-webkit-box;display:-ms-flexbox;display:flex}.suggestion-stats{font-size:.8rem}.suggestion-image{margin-right:1rem}.suggestion-identifier{font-size:.9rem;color:#0b1a33}.suggestion-no-result{color:#fff;padding:10px;font-size:1rem;text-align:center;background-color:#5488c7}
+.searchbox .autocomplete-suggestion{padding:10px;border:1px solid #d6d6d7;border-top:none}
+.announcement-item[data-v-6b9c7fc2]{padding:.6rem 1.5rem}.dropdown-item[data-v-6b9c7fc2]:active{color:#1d1e1f;text-decoration:none;background-color:#f6f6f7}.has-new[data-v-6b9c7fc2]{width:15px}
+.dropdown .dropdown-menu[data-v-242b9ddd],.dropup .dropdown-menu[data-v-242b9ddd]{padding:0;min-width:25rem}.dropdown .dropdown-badge[data-v-242b9ddd],.dropup .dropdown-badge[data-v-242b9ddd]{top:0;right:-50%;color:#fff;padding:0 4px;font-size:.7rem;position:absolute;background-color:#5488c7;border-radius:3px}.dropdown .dropdown-title[data-v-242b9ddd],.dropup .dropdown-title[data-v-242b9ddd]{display:-webkit-box;display:-ms-flexbox;display:flex;padding:.5rem;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;border-bottom:1px solid #d6d6d7}.dropdown .dropdown-title .dropdown-button[data-v-242b9ddd],.dropup .dropdown-title .dropdown-button[data-v-242b9ddd]{cursor:pointer}.dropdown .dropdown-container[data-v-242b9ddd],.dropup .dropdown-container[data-v-242b9ddd]{overflow-y:auto;max-height:20rem}.dropdown .dropdown-container .dropdown-item[data-v-242b9ddd],.dropup .dropdown-container .dropdown-item[data-v-242b9ddd]{word-break:break-word;word-wrap:break-word}.dropdown .dropdown-container .dropdown-item.highlight[data-v-242b9ddd],.dropup .dropdown-container .dropdown-item.highlight[data-v-242b9ddd]{background-color:rgba(75,205,159,.15)}.dropdown .dropdown-container .dropdown-item.highlight[data-v-242b9ddd]:hover,.dropup .dropdown-container .dropdown-item.highlight[data-v-242b9ddd]:hover{background-color:rgba(75,205,159,.35)}.dropdown .dropdown-footer[data-v-242b9ddd],.dropup .dropdown-footer[data-v-242b9ddd]{padding:.5rem;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;border-top:1px solid #d6d6d7;font-size:.75rem}.dropdown .dropdown-footer a[data-v-242b9ddd],.dropdown .dropdown-title a[data-v-242b9ddd],.dropup .dropdown-footer a[data-v-242b9ddd],.dropup .dropdown-title a[data-v-242b9ddd]{color:#0b1a33}@media (max-width:767px){.dropdown[data-v-242b9ddd],.dropup[data-v-242b9ddd]{position:static}.dropdown .dropdown-menu[data-v-242b9ddd],.dropup .dropdown-menu[data-v-242b9ddd]{min-width:0;width:96%;left:2%}}
+.promo .banner{margin:0 -15px}.promo .banner img{width:100%;pointer-events:none}
+.tag-promo{border-top:1px solid #d6d6d7}
+.post-sidebar{width:100%;margin-top:2rem}.post-sidebar .js-sidebar{margin-top:calc(-60px - 2rem)}.post-sidebar .js-sidebar .sidebar-sticky{padding-top:calc(60px + 2rem)}.post-sidebar .post-author{padding-bottom:15px;border-bottom:1px solid #d6d6d7}.post-sidebar .post-author-info{display:-webkit-box;display:-ms-flexbox;display:flex;margin-bottom:10px;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.post-sidebar .post-author-info .author-avatar img{width:60px;height:60px;margin-right:32px;border-radius:50%;border:1px solid #9b9b9b}.post-sidebar .post-author-info .author-name p{margin-bottom:0}.post-sidebar .post-author-info .author-name h3{font-weight:700;color:#0b1a33}.post-sidebar .post-author-info .author-name a:hover{text-decoration:none}.post-sidebar .post-author-stats{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.post-sidebar .post-author-stats p{margin-bottom:0;color:#9b9b9b}.post-sidebar .post-author-stats p span{margin-left:2px}.post-sidebar .post-author-stats .btn-follow{padding:.3rem .6rem}.post-sidebar .post-socialization{display:-webkit-box;display:-ms-flexbox;display:flex;padding:1rem;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.post-clip-widget{padding:1rem 0;border-bottom:1px solid #d6d6d7}.post-clip-widget .btn.clipped{border-color:#9b9b9b;background-color:#9b9b9b}.post-clip-widget .subscribers-preview{display:-webkit-box;display:-ms-flexbox;display:flex;margin-top:.5rem;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.post-clip-widget .subscribers-preview .avatar img{width:35px;height:35px}.post-clip-widget .hidden-counter{width:35px;height:35px;border-radius:50%;background-color:#5488c7}.post-clip-widget .hidden-counter span{color:#fff}.plus-widget-area .avatar img{width:35px;height:35px}.post-content-wrapper{margin-top:34px}.post-content-wrapper .icon-atom-plugin{left:20px;position:relative}.post-content-wrapper .icon-atom-plugin img{margin-right:2px;position:relative;top:-1px}.post-content-wrapper .icon-atom-plugin a{color:#9b9b9b}.post-content-wrapper .icon-atom-plugin a:hover{color:#5488c7}.post-content-wrapper .author-compact{margin-top:-30px;margin-bottom:30px}.post-content-wrapper .post-additional-info{display:-webkit-box;display:-ms-flexbox;display:flex}.post-content-wrapper .post-additional-info .post-stats{margin-left:2rem;margin-bottom:1rem}.post-content-wrapper .tags{margin:15px 0}.post-content-wrapper .tags .tag{font-size:90%}.post-content-wrapper .post-content{margin-top:1.5rem;font-size:1rem}.post-content-wrapper .post-content li{word-wrap:break-word}.post-right-menu{list-style:none;padding:0}.post-right-menu>li{display:inline-block}.post-right-menu>li:not(:first-child){margin-left:1rem}.post-right-menu>li a{color:#0b1a33;text-decoration:none}.post-right-menu>li a:active,.post-right-menu>li a:hover{color:#5488c7}
+.post-meta-container .meta-d1{margin-right:auto}.post-meta-container .meta-d2{margin-right:2rem}@media (max-width:767px){.post-meta-container .meta-d1{width:100%;margin-bottom:.5rem}.post-meta-container .meta-d2{margin-right:auto}}
+.post-stats{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;line-height:22px;color:#9b9b9b}.post-stats .stats-item{cursor:default}
+.post-side-widgets{top:150px;left:-50px;z-index:99;position:absolute}.post-side-widgets.normal{top:50px}.post-side-widgets>.widget{display:-webkit-box;display:-ms-flexbox;display:flex;margin-bottom:1rem;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.post-side-widgets .ratings{height:150px}.post-side-widgets .ratings .vote .fa{font-size:50px}.post-side-widgets .ratings .points{height:28px;font-size:28px;line-height:28px;color:#9b9b9b;font-weight:500}
+.vote[data-v-a72a7f90]:focus{outline:none}.vote[data-v-a72a7f90]:not(.disabled){color:#9b9b9b}.vote[data-v-a72a7f90]:not(.disabled):focus:hover,.vote[data-v-a72a7f90]:not(.disabled):hover{color:#5b5b5b}.vote[data-v-a72a7f90]:not(.disabled):active,.vote[data-v-a72a7f90]:not(.disabled):focus,.vote[data-v-a72a7f90]:not(.disabled):visited{color:#000;color:initial}.vote:not(.disabled).disabled[data-v-a72a7f90]{color:#9b9b9b}.vote:not(.disabled).disabled[data-v-a72a7f90]:hover{color:#757575}.vote:not(.disabled).voted .fa[data-v-a72a7f90]{color:#5488c7!important}.vote.disabled[data-v-a72a7f90]{color:#dbdbdb}
+.tags .tag[data-v-2d5c6a76]:not(:last-child){margin-right:5px}.tags .tag.badge-primary[data-v-2d5c6a76]:focus,.tags .tag.badge-primary[data-v-2d5c6a76]:hover{color:#fff}.tags .tag[data-v-2d5c6a76]{font-size:90%;margin-bottom:0;max-width:200px}@media (max-width:767px){.tags .tag[data-v-2d5c6a76]{font-size:.7rem}}
+.publishing-date{text-align:left;color:#9b9b9b;font-size:.875rem}
+.report{cursor:pointer;transition:color .45s cubic-bezier(.23,1,.32,1) 0ms}.report:hover,.reported{color:red}
+.modal[data-v-63cb00c0]{z-index:1200}.modal>.modal-backdrop[data-v-63cb00c0]{z-index:1250}.modal>.modal-dialog[data-v-63cb00c0]{z-index:1280}.modal-dialog[data-v-63cb00c0]{opacity:1;-webkit-transform:translate(0);transform:translate(0);transition:transform .3s ease-out,-webkit-transform .3s ease-out,opacity .15s linear}.modal-backdrop[data-v-63cb00c0]{opacity:.5;transition:opacity .15s linear}.js-popup[data-v-63cb00c0]{transition:opacity .3s linear}.modal-body-fit-screen .modal-body[data-v-63cb00c0]{height:82vh;overflow-y:auto}.dialog-enter .modal-backdrop[data-v-63cb00c0],.dialog-enter .modal-dialog[data-v-63cb00c0],.dialog-leave-to .modal-backdrop[data-v-63cb00c0],.dialog-leave-to .modal-dialog[data-v-63cb00c0]{opacity:0}.dialog-enter .modal-dialog[data-v-63cb00c0],.dialog-leave-to .modal-dialog[data-v-63cb00c0]{-webkit-transform:translateY(-25%);transform:translateY(-25%)}.modal.no-border .modal-footer[data-v-63cb00c0],.modal.no-border .modal-header[data-v-63cb00c0]{border:none}
+.post-sidebar{width:100%;margin-top:2rem}.post-sidebar .js-sidebar{margin-top:calc(-60px - 2rem)}.post-sidebar .js-sidebar .sidebar-sticky{padding-top:calc(60px + 2rem)}.post-sidebar .post-author{padding-bottom:15px;border-bottom:1px solid #d6d6d7}.post-sidebar .post-author-info{display:-webkit-box;display:-ms-flexbox;display:flex;margin-bottom:10px;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.post-sidebar .post-author-info .author-avatar img{width:60px;height:60px;margin-right:32px;border-radius:50%;border:1px solid #9b9b9b}.post-sidebar .post-author-info .author-name p{margin-bottom:0}.post-sidebar .post-author-info .author-name h3{font-weight:700;color:#0b1a33}.post-sidebar .post-author-info .author-name a:hover{text-decoration:none}.post-sidebar .post-author-stats{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.post-sidebar .post-author-stats p{margin-bottom:0;color:#9b9b9b}.post-sidebar .post-author-stats p span{margin-left:2px}.post-sidebar .post-author-stats .btn-follow{padding:.3rem .6rem}.post-sidebar .post-socialization{display:-webkit-box;display:-ms-flexbox;display:flex;padding:1rem;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.post-clip-widget{padding:1rem 0;border-bottom:1px solid #d6d6d7}.post-clip-widget .btn.clipped{border-color:#9b9b9b;background-color:#9b9b9b}.post-clip-widget .subscribers-preview{display:-webkit-box;display:-ms-flexbox;display:flex;margin-top:.5rem;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.post-clip-widget .subscribers-preview .avatar img{width:35px;height:35px}.post-clip-widget .hidden-counter{width:35px;height:35px;border-radius:50%;background-color:#5488c7}.post-clip-widget .hidden-counter span{color:#fff}.plus-widget-area .avatar img{width:35px;height:35px}.post-content-wrapper{margin-top:34px}.post-content-wrapper .icon-atom-plugin{left:20px;position:relative}.post-content-wrapper .icon-atom-plugin img{margin-right:2px;position:relative;top:-1px}.post-content-wrapper .icon-atom-plugin a{color:#9b9b9b}.post-content-wrapper .icon-atom-plugin a:hover{color:#5488c7}.post-content-wrapper .author-compact{margin-top:-30px;margin-bottom:30px}.post-content-wrapper .post-additional-info{display:-webkit-box;display:-ms-flexbox;display:flex}.post-content-wrapper .post-additional-info .post-stats{margin-left:2rem;margin-bottom:1rem}.post-content-wrapper .tags{margin:15px 0}.post-content-wrapper .tags .tag{font-size:90%}.post-content-wrapper .post-content{margin-top:1.5rem;font-size:1rem}.post-content-wrapper .post-content li{word-wrap:break-word}.post-right-menu{list-style:none;padding:0}.post-right-menu>li{display:inline-block}.post-right-menu>li:not(:first-child){margin-left:1rem}.post-right-menu>li a{color:#0b1a33;text-decoration:none}.post-right-menu>li a:active,.post-right-menu>li a:hover{color:#5488c7}
+.u-sm-avatar{margin-right:.3rem}.u-sm-avatar img{width:1.3rem}.hidden-counter{width:1.3rem;height:1.3rem;line-height:1.3rem;border-radius:50%;background-color:#5488c7}.hidden-counter span{color:#fff;font-size:.75rem}
+.js-sidebar{min-height:calc(100% + 30px);position:relative;margin-top:-30px}.sidebar-content-wrapper{width:255px}.sidebar-content-wrapper .sidebar-content{padding-left:1em;border-left:1px solid #d6d6d7}.sidebar-sticky{position:relative;transition:width .45s cubic-bezier(.23,1,.32,1) 0ms;padding:30px 0;width:255px}.sidebar-sticky.docked{position:fixed}.sidebar-sticky.docked.top{top:0}.sidebar-sticky.docked.bottom{bottom:0}.sidebar-sticky.stopped{position:absolute;bottom:0}
+.sidebar-box .user-card:not(:last-child){margin-bottom:20px}.user-card.bottom-line{border-bottom:1px solid #d6d6d7}.user-card .user-info-row{display:-webkit-box;display:-ms-flexbox;display:flex;margin-bottom:10px}.user-card .user-info-row>div:first-child{min-width:80px;max-width:80px;text-align:center}.user-card .user-info-row>div:nth-child(2){margin-left:10px;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.user-card .user-info-row .user-name{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.user-card .user-action-follow .btn-follow{padding:.3rem .6rem}.user-card .user-stats{color:#9b9b9b;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start}.user-card .user-stats span{-ms-flex-negative:0;flex-shrink:0}.user-card .user-stats span:not(:first-child){margin-left:1rem}
+.post-toc{padding:0;display:block;margin-bottom:0;list-style:none}.post-toc li{line-height:1.2;list-style:none;padding:5px 0;font-size:1rem}.post-toc li .nav-link{padding:0}.post-toc li .post-toc-link{display:block;color:#0b1a33;text-decoration:none}.post-toc li .post-toc-link:hover{color:#5488c7}.post-toc li .post-toc-link.active{z-index:10;font-weight:700;position:relative;color:#5488c7}.post-toc li .post-toc-link.active:before{top:0;left:0;width:4px;content:"";height:100%;position:absolute;background:#5488c7}.post-toc li.index-item{padding:0}.post-toc li.index-item-level-1>a{padding-left:1rem}.post-toc li.index-item-level-2>a{padding-left:1.75rem}.post-toc li.index-item-level-3>a{padding-left:2.5rem}
+.users-popup .user-info-row:not(:last-child){padding-bottom:.65rem;margin-bottom:.65rem;border-bottom:1px solid #ddd}.users-popup .user-card{margin-bottom:1rem}.users-popup .user-card .user-avatar{min-width:40px}.users-popup .user-card:last-child{margin-bottom:0;border-bottom:none}.users-popup .user-card:last-child .user-info-row{margin-bottom:0}.users-popup .viblo-modal-body{max-height:50vh;overflow-y:auto}
+.lity-viewport{overflow:hidden}.lity-viewport .lity-wrapper{overflow:auto}.lity-backdrop{position:fixed;z-index:8008;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.9);transition:opacity .3s ease;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.lity-backdrop,.lity-wrapper{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.lity-dialog{transition:-webkit-transform .3s ease;transition:transform .3s ease;transition:transform .3s ease,-webkit-transform .3s ease}.lity-header h2,.lity-header h3,.lity-header h4{margin-top:0}.lity-body{margin:20px 0}.lity-enter,.lity-leave-active{opacity:0}.lity-enter .lity-dialog,.lity-leave-active .lity-dialog{-webkit-transform:scale(.7);transform:scale(.7)}
+@-webkit-keyframes flash{50%{background-color:rgba(75,205,159,.25)}}@keyframes flash{50%{background-color:rgba(75,205,159,.25)}}.highlight{-webkit-animation:flash 1s ease-out 1;animation:flash 1s ease-out 1}
+.post-bottom-bar[data-v-abe152ec]{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:baseline;-ms-flex-align:baseline;align-items:baseline;background:#fff;padding:4px 8px;width:100%;border-top:1px solid #ddd}.post-bottom-bar .ratings[data-v-abe152ec]{display:-webkit-box;display:-ms-flexbox;display:flex;font-size:1.2rem}.post-bottom-bar .ratings .points[data-v-abe152ec]{margin:0 5px}.post-bottom-bar .ratings .voted[data-v-abe152ec]{color:#5488c7}.post-bottom-bar .ratings .disabled[data-v-abe152ec]{color:#ddd}.post-bottom-bar .sharings .fa[data-v-abe152ec]{font-size:1rem}.post-bottom-bar .sharings .fa-facebook[data-v-abe152ec]{color:#3b5998}.post-bottom-bar .sharings .fa-google-plus[data-v-abe152ec]{color:#e94820}.post-bottom-bar .sharings .fa-twitter[data-v-abe152ec]{color:#1da1f2}.post-bottom-bar .sharings .sharing-item[data-v-abe152ec]{margin:0 .2rem;display:inline-block;border:1px solid #ddd;border-radius:100%;width:35px;height:35px;text-align:center;line-height:35px}.post-bottom-bar .sharings .clip.clipped[data-v-abe152ec]{color:#fff;background-color:#5488c7;border-color:#5488c7!important}
+ul.hot-authors{list-style-type:none;padding:0;display:-webkit-box;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin:-10px}ul.hot-authors>li{padding:10px;display:inline-block;-ms-flex-preferred-size:33%;flex-basis:33%}
+#top-btn{opacity:0;z-index:99;right:1.25rem;width:2.813rem;bottom:1.25rem;height:2.813rem;display:flex;display:-webkit-box;display:-ms-flexbox;-webkit-box-align:center;-webkit-box-pack:center;-ms-flex-align:center;-ms-flex-pack:center;position:fixed;overflow:hidden;visibility:hidden;align-items:center;text-decoration:none;justify-content:center;background-color:#5488c7;border-radius:.188rem;line-height:1.6;font-size:.875rem}#top-btn .fa{font-size:1.313rem;color:#fff}#top-btn.top-btn-is-visible{visibility:visible;opacity:1}</style>
+  <script id="facebook-jssdk" src="./Làm quen với Multithreading Trong C++ - Viblo_files/sdk.js.tải xuống"></script><script type="text/javascript" charset="utf8" async="" src="./Làm quen với Multithreading Trong C++ - Viblo_files/analytics.js.tải xuống"></script><script type="text/javascript" charset="utf-8" async="" src="./Làm quen với Multithreading Trong C++ - Viblo_files/default.cfe237fcdce788b134e2.js.tải xuống"></script><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style id="mini-toastr-styles" type="text/css">
+  .mini-toastr  {
+    position: fixed;
+    z-index: 99999;
+    right: 12px;
+    top: 12px;
+  }
+
+  .mini-toastr__notification  {
+    cursor: pointer;
+    padding: 12px 18px;
+    margin: 0 0 6px 0;
+    background-color: #000;
+    opacity: 0.8;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: #3c3b3b 0 0 12px;
+    width: 300px;
+  }
+
+  .mini-toastr__notification.-error  {
+    background-color: #D5122B;
+  }
+
+  .mini-toastr__notification.-warn  {
+    background-color: #F5AA1E;
+  }
+
+  .mini-toastr__notification.-success  {
+    background-color: #7AC13E;
+  }
+
+  .mini-toastr__notification.-info  {
+    background-color: #4196E1;
+  }
+
+  .mini-toastr__notification:hover  {
+    opacity: 1;
+    box-shadow: #000 0 0 12px;
+  }
+
+  .mini-toastr-notification__title  {
+    font-weight: 500;
+  }
+
+  .mini-toastr-notification__message  {
+    display: inline;-block,
+    vertical-align: middle;
+    width: 240px;
+    padding: 0 12px;
+  }
+</style><style type="text/css">.related-posts-widget .related-posts-box{display:-webkit-box;display:-ms-flexbox;display:flex;margin:0 -5px;-ms-flex-wrap:wrap;flex-wrap:wrap}.related-posts-widget .related-posts-box .item{padding:5px;-webkit-box-flex:0;-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.related-posts-widget .related-posts-box .card{height:100%;margin:0}@media (max-width:1199px){.related-posts-widget .related-posts-box .item{-webkit-box-flex:0;-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}}@media (max-width:767px){.related-posts-widget .related-posts-box .item{-webkit-box-flex:0;-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}}</style><style type="text/css">.post-card-title{word-break:break-word;word-wrap:break-word;color:#0b1a33;font-size:1.1rem}.post-card-title a{color:#0b1a33!important}.post-card-title:hover a{color:#5488c7!important;text-decoration:none}.post-card-author{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;color:#5488c7}.post-card .video-indicator{font-size:1rem;color:#4bcd9f}</style><style type="text/css">.points{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;cursor:default}.points .carets{display:-webkit-inline-box;display:-ms-inline-flexbox;display:inline-flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;margin-right:.25rem}.points .carets .fa{font-size:1rem;color:#9b9b9b}.points .carets .fa:first-child{height:.5rem;margin-top:-.25rem}.points .carets .fa.voted{color:#5488c7}</style><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}.fb_shrink_active{opacity:1;transform:scale(1, 1);transition-duration:200ms;transition-timing-function:ease-out}.fb_shrink_active:active{opacity:.5;transform:scale(.75, .75)}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:24px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:18px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}</style></head>
+  <body data-n-head="">
+    <div id="__nuxt"><div class="progress" style="width:0%;height:2px;background-color:#5488c7;opacity:0;" data-v-07a9c348=""></div><div id="app-container"><nav id="main-navbar" class="navbar navbar-full fixed-top navbar-light px-0 d-block"><div class="nav-container container"><div class="nav-left nav-container"><a href="https://viblo.asia/" class="navbar-brand mx-xl-0 mr-1"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/logo_full.svg" alt="Viblo"></a><div class="v-dropdown"><i class="fa fa-reorder dropdown-btn nav-icon"></i><ul area-show="false" class="nav-items main-menu ml-xl-5 hidden-md-down main-menu-responsive"><li class="nav-item active"><a href="https://viblo.asia/" class="nav-link">Posts</a></li><li class="nav-item"><a href="https://viblo.asia/questions" class="nav-link">Questions</a></li><li class="nav-item"><a href="https://viblo.asia/discussion" class="nav-link">Discussions</a></li></ul></div></div><ul class="nav-items nav-container navbar-right"><li class="nav-item hidden-md-up"><a href="https://viblo.asia/search" class="nav-icon"><i aria-hidden="true" class="fa fa-search"></i></a></li><li class="nav-item hidden-sm-down"><div id="main-search-form" submit-url="/search"><div class="autocomplete searchbox"><i class="searchbox-icon fa fa-circle-o-notch fa-spin" style="display:none;"></i><input type="text" name="q" maxlength="255" autocomplete="off" placeholder="What are you looking for?" value="" class="form-control"><!----><!----></div><button class="btn btn-primary search-btn"><i class="fa fa-search"></i></button></div></li><li class="nav-item"><div class="dropdown" data-v-242b9ddd="" data-v-6b9c7fc2=""><div class="dropdown-toogle" data-v-242b9ddd=""><a href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE#" aria-haspopup="true" class="nav-icon no-decoration-link" data-v-242b9ddd="" data-v-6b9c7fc2=""><i aria-hidden="true" class="fa fa-info" data-v-242b9ddd="" data-v-6b9c7fc2=""></i></a></div><div class="dropdown-menu dropdown-menu-right" data-v-242b9ddd=""><div class="dropdown-title" data-v-242b9ddd=""><span data-v-242b9ddd="" data-v-6b9c7fc2="">Announcements</span></div><div class="dropdown-container" data-v-242b9ddd=""><!----><!----><ul class="dropdown-items pl-0" data-v-242b9ddd="" data-v-6b9c7fc2=""><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/gioi-hieu-tinh-nang-post-series-ORNZqoLr50n" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Giới hiệu tính năng Post Series</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">Sep 15th, 4:31 pm</small></a></li><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/ve-su-co-gui-nhieu-newsletter-voi-cung-noi-dung-den-nguoi-dung-gDVK2w6XZLj" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Về sự cố gửi nhiều Newsletter với cùng nội dung đến người dùng</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">Sep 15th, 4:25 pm</small></a></li><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/viblo-highly-recommends-rails-girls-hanoi-2017-lan-toa-suc-manh-cua-nu-lap-trinh-vien-maGK7zDe5j2" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Viblo Highly Recommends: Rails Girls Hanoi 2017 - Lan tỏa sức mạnh của nữ lập trình viên</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">Aug 29th, 3:15 pm</small></a></li><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/viblo-proudly-presents-the-question-answer-feature-naQZR7Njlvx" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Viblo proudly presents: the "Question &amp; Answer" feature</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">Aug 8th, 2:44 pm</small></a></li><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/gioi-thieu-chuc-nang-viblos-video-podcast-RQqKLxp4K7z" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Giới thiệu chức năng Viblo's Video Podcast</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">Jul 10th, 4:14 pm</small></a></li><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/gioi-thieu-viblos-atom-plugin-djeZ1agmZWz" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Giới thiệu Viblo's Atom Plugin</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">May 11th, 1:38 pm</small></a></li><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/ve-su-co-mot-so-comment-bi-mat-tren-viblo-3P0lPMRg5ox" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Về sự cố một số comment bị mất trên Viblo</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">Apr 4th, 6:04 pm</small></a></li><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/viblo-highly-recommends-the-code-war-contest-RQqKLMV0Z7z" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Viblo Highly Recommends: The Code War Contest</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">Mar 28th, 3:55 pm</small></a></li><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/gioi-thieu-viblos-browser-extension-L4x5xQPrKBM" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Giới thiệu Viblo's browser extension</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">Mar 24th, 1:12 pm</small></a></li><li data-v-6b9c7fc2="" data-v-242b9ddd="" class="dropdown-item p-0"><a data-v-6b9c7fc2="" href="https://viblo.asia/announcements/gioi-thieu-tinh-nang-trending-posts-Qpmleqe9lrd" class="d-block no-decoration-link announcement-item" data-v-242b9ddd=""><span data-v-6b9c7fc2="">Giới thiệu tính năng Trending posts</span><br data-v-6b9c7fc2=""><small data-v-6b9c7fc2="" class="subtext">Mar 23rd, 10:30 am</small></a></li></ul></div><div class="dropdown-footer" data-v-242b9ddd=""><a href="https://viblo.asia/announcements" data-v-6b9c7fc2="" class="" data-v-242b9ddd="">All Announcements</a></div></div></div></li><!----><!----><li class="nav-item"><a href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE#" class="no-decoration-link"><i class="fa fa-sign-in"></i> Sign In/Sign up
+    </a></li></ul></div></nav><div id="main-content"><div><a href="https://awesome-academy.com/khoa-hoc/lap-trinh-ruby?utm_source=viblo&amp;utm_medium=banner&amp;utm_campaign=awa"><div class="promo" style="background-color:#ffffff;"><div class="container"><div class="banner"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/a3b4eba8-a172-4f87-b7f8-a68853eaba66.png" style="max-height:168px;"></div></div></div></a><div actions="[object Object]" related="[object Object]"><div class="container"><div class="row pt-3 pb-1"><div class="col-xl-9 offset-xl-0 col-lg-10 offset-lg-1"><div class="post-content-wrapper"><div class="post-side-widgets hidden-md-down" style="margin-top: 2272px;"><div class="widget ratings" data-v-a72a7f90=""><button class="icon-btn vote" data-v-a72a7f90="" data-tooltipped="" aria-describedby="tippy-tooltip-1" data-original-title="Upvote"><i aria-hidden="true" class="fa fa-caret-up" data-v-a72a7f90=""></i></button><div class="points" data-v-a72a7f90="">0</div><button class="icon-btn vote" data-v-a72a7f90="" data-tooltipped="" aria-describedby="tippy-tooltip-2" data-original-title="Downvote"><i aria-hidden="true" class="fa fa-caret-down" data-v-a72a7f90=""></i></button></div></div><div class="post-meta"><div class="author-compact hidden-lg-up flexbox flex-items-xs-left"><div><a href="https://viblo.asia/u/kienvt" class="avatar"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/mm.png" srcset="https://viblo.asia/images/mm.png 1x, https://viblo.asia/images/mm.png 2x"></a></div><div class="mx-1"><a href="https://viblo.asia/u/kienvt" class="link block">
+                    Vu Trung Kien
+                </a><button type="button" class="btn btn-small-padding btn-medium-border block mt-05 btn-white">
+    Follow
+</button></div></div><h1 class="is-markdown-title">Làm quen với Multithreading Trong C++</h1><div class="tags" data-v-2d5c6a76=""><!----><!----><!----><!----><a href="https://viblo.asia/tags/ios" class="tag badge badge-default overflow-hidden" data-v-2d5c6a76="">iOS</a><a href="https://viblo.asia/tags/android" class="tag badge badge-default overflow-hidden" data-v-2d5c6a76="">Android</a><a href="https://viblo.asia/tags/cpp" class="tag badge badge-default overflow-hidden" data-v-2d5c6a76="">C++</a></div><div class="d-flex flex-wrap flex-items-xs-between flex-row-sm flex-col-xs post-meta-container"><div class="meta-d1"><div class="publishing-date"><i aria-hidden="true" class="fa fa-calendar mr-05"></i> May 30th, 2016 2:36 am
+        <!----></div></div><div class="meta-d2"><div class="post-stats"><span class="stats-item mr-05" data-tooltipped="" aria-describedby="tippy-tooltip-3" data-original-title="Views"><i aria-hidden="true" class="fa fa-eye"></i> 1487</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-4" data-original-title="Clips"><i aria-hidden="true" class="fa fa-paperclip"></i> 4</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-5" data-original-title="Comments"><i aria-hidden="true" class="fa fa-comments"></i> 0</span></div></div><div class="meta-d3"><ul class="post-right-menu mb-0"><li><div><div data-v-63cb00c0=""></div><span aria-haspopup="true" class="report"><i aria-hidden="true" class="fa fa-flag"></i> Report
+    </span></div></li></ul></div></div><!----><!----><!----></div><!----><div class="md-contents post-content"><p>Dạo này loanh quanh nghe thấy từ multipe thread hơi nhiều. Từ những bài seminar đến trong project hiện tại cũng có nhiều vấn đề liên quan. Về cơ bản mình cũng không phải cao thủ gì, tuỳ nhiên cũng muốn lọ mọ 1 chút gọi là góp vui :D.<br>
+Mình làm về mobile, chủ yếu là 2 mảng Android + IOS. Nên đương nhiên là dù có viết gì, tìm hiểu cái gì thì mục đích chính vẫn là phục vụ cho 2 nền tảng này. Và về cơ bản thì thằng nào cũng có cái gốc gác từ thằng C, vì thế quyết định chiến từ gốc lên cho máu.<br>
+Đáng lẽ ra thì phải viết về posix threads Bởi nó mới là thằng phục vụ chính cho các platform. Tuy nhiên code C thì có vẻ khó đọc hơn C++, hơn nữa Ubuntu với Mac là đủ để demo, mà về cơ bản thì cơ chế của nó cũng vậy. Khi các bạn đọc hiểu được std:thread thì pThread cũng hoàn toàn có các hàm tương ứng. Kỳ sau sẽ giải thích rõ hơn về vấn đề này.</p>
+<h1 id="multithreading-da-luong-la-gi-0">Multithreading (đa luồng) là gì?</h1>
+<p>Trước hết chúng ta cùng tìm hiểu xem MultiThread là gì? Về cơ bản Multi Thread là một khả năng của một nền tảng (hệ điều hành, máy ảo vv) hoặc các ứng dụng để tạo ra một quá trình bao gồm nhiều Thread được thực thi. Một Thread thực hiện là chuỗi nhỏ nhất của hướng dẫn lập trình có thể được quản lý một cách độc lập bởi một lscheduler . Những Thread có thể chạy song song và nó có thể làm tăng hiệu quả của chương trình.</p>
+<p>Trong các hệ thống đa lõi và đa xử lý thì đa luồng tức là các thread được thực hiện cùng lúc trên lõi hoặc bộ vi xử lý khác nhau.</p>
+<p>Đối với hệ thống lõi đơn thì đa luồng chia thời gian giữa các thread. System sẽ gửi 1 số lượng nhất định các hướng dẫn từ mỗi Thread để xử lý. Các Thread không được thực hiện đồng thời. System chỉ mô phỏng thực hiện đồng thời của chúng. Tính năng này của System được gọi là đa luồng.</p>
+<p>Multithreading được sử dụng khi thực hiện song song 1 số nhiệm vụ dẫn đến việc tận dụng hiệu quả hơn các tài nguyên của hệ thống.</p>
+<p>Trong C++11 được xây dưng header thread.h để tạo ra các multithreaded C++ programs.</p>
+<h1 id="how-to-create-a-thread-1">How to create a thread?</h1>
+<p>Đầu tiên dĩ nhiên cần include header thread vào class.</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;thread&gt;</span></span>
+</code></pre>
+<p>Khi muốn khởi tạo 1 thread, bạn tạo 1 thread object:</p>
+<pre><code class="hljs language-C_Cpp">thread t_empty<span class="hljs-comment">;</span>
+</code></pre>
+<p>Như bạn thấy, hàm khởi tạo mặc định của thread class được sử dụng. Chúng ta không chuyền bất cứ 1 thông tin nào vào thread. Tức là không có gì được chạy trong thread này. Chúng ta phải khởi tạo thread. Nó có thể được hoàn thành bằng cách khác.<br>
+Khi bạn tạo 1 thread, bạn có thể truyền 1 con trỏ hàm vào khởi tạo của nó. 1 thread được khởi tạo, function sẽ bắt đầu chạy, nó chạy trong 1 thread riêng biệt:</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;thread&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">threadFunc</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Welcome to Multithreading"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+
+}
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+<span class="hljs-comment">//truyền 1 function tới thread</span>
+    <span class="hljs-function">thread <span class="hljs-title">funcTest1</span><span class="hljs-params">(threadFunc)</span></span>;
+}
+</code></pre>
+<p>Bạn có thể thử chạy đoạn code trên, biên dịch không có vấn đề gì, tuy nhiên bạn sẽ lập tức đối mặt với 1 runtime error: WHYYYYYY?</p>
+<p>Thực tế thì câu trả lời khá đơn giản: Main thread tạo 1 thread mới là funcTest1 với paramaters threadFunc. Main thread không đợi funcTes1 huỷ. Nó tiếp tục hoạt động và sẽ kết thúc, nhưng funcTest1 vẫn chạy. Nó sẽ dẫn đễn lỗi. TẤT CẢ CÁC THREAD PHẢI HUỶ TRƯỚC KHI MAIN THREAD HUỶ.<br>
+Vậy làm các nào khắc phục vấn đề này?????</p>
+<h1 id="join-threads-2">Join threads</h1>
+<p>Thread class cung cấp method join(), hàm này chỉ return khi tất cả các thread kết thúc, điều đó có nghĩa là main thread sẽ đợi đến khi tất cả các thread con hoàn thành công việc của nó.<br>
+Add thêm đoạn call hàm joind vào sample trên và chạy lại</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-comment">//truyền 1 function tới thread</span>
+<span class="hljs-function">thread <span class="hljs-title">funcTest1</span>(<span class="hljs-params">threadFunc</span>)</span>;
+<span class="hljs-comment">//main sẽ block đến khi funcTest1 kết thúc</span>
+funcTest1.<span class="hljs-keyword">join</span>();
+</code></pre>
+<p>Bây giờ khi run lại chương trình sẽ không còn lỗi nữa (ngon)</p>
+<h1 id="joinable-and-not-joinable-threads-3">Joinable and not Joinable threads</h1>
+<p>Sau khi hàm join return, thread trở lên không thể join lại. 1 joinable thread là 1 thread mà đại diện cho 1 execution mà chưa join.</p>
+<p>1 thread không là joinable khi nó được khởi tạo mặc định hoặc được moved/assigned tới 1 thread khác hoặc joind hoặc detach hàm đã được họi<br>
+Not joinable thread có thể huỷ 1 cách an toàn.<br>
+Hàm joinable để checks thread có là joinable thread hay không.</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">joinable</span><span class="hljs-params">()</span>
+</span></code></pre>
+<p>Nên sử dụng hàm này trước khi call hàm join();</p>
+<p>This function returns true if the thread is joinable and false otherwise. It’s better to check if the thread is joinable before join() function is called:</p>
+<pre><code class="hljs language-C_Cpp">//truyền <span class="hljs-number">1</span> <span class="hljs-keyword">function</span> <span class="hljs-title">tới</span> thread
+thread funcTest1(threadFunc);
+//check <span class="hljs-keyword">if</span> thread <span class="hljs-keyword">is</span> joinable
+<span class="hljs-keyword">if</span> (funcTest1.joinable())
+{
+//main <span class="hljs-keyword">is</span> blocked until funcTest1 <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> finished
+    funcTest1.join();
+}
+</code></pre>
+<h1 id="detaching-thread-4">Detaching thread</h1>
+<p>Như đã nhắc ở trên, thread trở thành not joinable sau khi hàm detach được gọi.</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-keyword">void</span> <span class="hljs-built_in">detach</span>()
+</code></pre>
+<p>Hàm này tách 1 thread từ 1 thread cha, nó cho phép thread cha và thread con được chạy ngay lập tức từ cái còn lại. Sau khi call detach functon, các thread sẽ không đồng bộ trong bất kỳ cách nào.</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-regexp">//</span>detach funcTest1 <span class="hljs-keyword">from</span> main thread
+funcTest1.detach();
+<span class="hljs-keyword">if</span> (funcTest1.joinable())
+{
+    <span class="hljs-regexp">//m</span>ain <span class="hljs-keyword">is</span> blocked <span class="hljs-keyword">until</span> funcTest1 <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> finished
+    funcTest1.join();
+}
+<span class="hljs-keyword">else</span>
+{
+    cout &lt;&lt; <span class="hljs-string">"functTest1 is detached"</span> &lt;&lt; endl;
+}
+</code></pre>
+<p>Bạn sẽ nhận thấy mainthread không đợi các thread con bị huỷ!</p>
+<h1 id="initializing-thread-with-an-object-5">Initializing thread with an object</h1>
+<p>Bạn có thể khởi tạo thread không chỉ với 1 function mà có thể dùng với 1 object hoặc 1 function của class.</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-selector-tag">class</span> <span class="hljs-selector-tag">myFunctor</span>
+{
+<span class="hljs-attribute">public</span>:
+    void <span class="hljs-built_in">operator</span>()()
+    {
+        cout &lt;&lt; <span class="hljs-string">"This is my function object"</span> &lt;&lt; endl;
+    }
+};
+</code></pre>
+<p>Bây giờ bạn có thể khởi tạo thread bằng cách truyền object của class myFunctor vào hàm khởi tạo của thread:</p>
+<pre><code class="hljs language-C_Cpp">myFunctor myFunc<span class="hljs-comment">;</span>
+thread functorTest(myFunc)<span class="hljs-comment">;</span>
+if (functorTest.joinable())
+functorTest.join()<span class="hljs-comment">;</span>
+</code></pre>
+<p>Nếu bạn muốn khởi tạo thread với 1 public function của class, bạn phải định nghĩa function và truyền object của class định nghĩa function đó:</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">publicFunction</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"public function of myFunctor class is called"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+}
+</code></pre>
+<p>Bây giờ có thể khởi tạo thread với hàm publicFunction của myFunctor class:</p>
+<pre><code class="hljs language-C_Cpp">myFunctor myFunc;
+//initializing thread <span class="hljs-keyword">with</span> member <span class="hljs-keyword">function</span> <span class="hljs-title">of</span> myFunctor class
+thread functorTest(&amp;myFunctor::publicFunction,myFunc);
+<span class="hljs-keyword">if</span> (functorTest.joinable())
+    functorTest.join();
+</code></pre>
+<h1 id="passing-arguments-to-thread-6">Passing arguments to thread</h1>
+<p>Trong ví dụ trên chúng ta chỉ sử dụng hàm và đối tượng mà không phải truyền thêm các argyments vào các hàm và object.<br>
+Chúng ta có thể sử dụng function vớ các paramaters cho khác hàm khởi tạo thread. Vd:</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">printSomeValues</span><span class="hljs-params">(<span class="hljs-keyword">int</span> val, <span class="hljs-keyword">char</span>* str, <span class="hljs-keyword">double</span> dval)</span>
+</span>{
+    <span class="hljs-built_in">cout</span> &lt;&lt; val &lt;&lt; <span class="hljs-string">" "</span> &lt;&lt; str &lt;&lt;<span class="hljs-string">" "</span> &lt;&lt; dval &lt;&lt; <span class="hljs-built_in">endl</span>;
+
+}
+</code></pre>
+<p>Có thruyền pointer tới function. Để truyền các arguments Để thấy function này có 3 arguments. Nếu bạn muốn khởi tạo với function này, trước hết bạn phải truyền con trỏ tới hàm.</p>
+<pre><code class="hljs language-JSON">char* str = "Hello";
+//5, str and 3.2 are passed to printSomeValues function
+thread paramPass(printSomeValues, 5, str, 3.2);
+if (paramPass.joinable())
+paramPass.join();
+</code></pre>
+<p>Khi bạn khởi tạo 1 thread với 1 object có params, chúng ta phải add list các param tương ứng vào.<br>
+When you want to initialize a thread with an object with parameters, we have to add corresponding parameter list to the overloading version of operator ():</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">myFunctorParam</span>
+{</span>
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-keyword">int</span>* arr, <span class="hljs-keyword">int</span> length)</span>
+    </span>{
+        <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"An array of length "</span> &lt;&lt; length &lt;&lt; <span class="hljs-string">"is passed to thread"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i != length; ++i)
+            <span class="hljs-built_in">cout</span> &lt;&lt; arr[i] &lt;&lt; <span class="hljs-string">" "</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+        <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+    }
+};
+</code></pre>
+<p>Bạn có thể thấy, operator () có 2 paramaters:</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-keyword">void</span> <span class="hljs-keyword">operator</span>()(<span class="hljs-keyword">int</span>* arr, <span class="hljs-keyword">int</span> length)
+</code></pre>
+<p>Khởi tạo thread với 1 object trong trường hợp này giống như sử dụng hàm với các paramater:</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-comment">//these parameters will be passed to thread</span>
+<span class="hljs-keyword">int</span> arr[<span class="hljs-number">5</span>] = { <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">9</span> };
+myFunctorParam objParamPass;
+<span class="hljs-function">thread <span class="hljs-title">test</span>(<span class="hljs-params">objParamPass, arr, <span class="hljs-number">5</span></span>)</span>;
+<span class="hljs-keyword">if</span> (test.joinable())
+    test.<span class="hljs-keyword">join</span>();
+</code></pre>
+<p>Có thể sử dụng 1 hàm của class như params của thread. Add 1 public function vào  myFunctorParam class:</p>
+<pre><code class="hljs language-C_Cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">changeSign</span><span class="hljs-params">(<span class="hljs-keyword">int</span>* arr, <span class="hljs-keyword">int</span> length)</span>
+</span>{
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"An arrray of length "</span> &lt;&lt; length &lt;&lt; <span class="hljs-string">"is passed to thread"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i != length; ++i)
+        <span class="hljs-built_in">cout</span> &lt;&lt; arr[i] &lt;&lt; <span class="hljs-string">" "</span>;
+    <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Changing sign of all elements of initial array"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i != length; ++i)
+    {
+        arr[i] *= <span class="hljs-number">-1</span>;
+        <span class="hljs-built_in">cout</span> &lt;&lt; arr[i] &lt;&lt; <span class="hljs-string">" "</span>;
+    }
+}
+</code></pre>
+<p>Truyền argument vào member function:</p>
+<pre><code class="hljs language-C_Cpp">int arr2[<span class="hljs-number">5</span>] = { -<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, -<span class="hljs-number">7</span>, <span class="hljs-number">0</span> };
+//initialize thread <span class="hljs-keyword">with</span> member <span class="hljs-keyword">function</span>
+<span class="hljs-title">thread</span> test2(&amp;myFunctorParam::changeSign, &amp;objParamPass, arr2, 5);
+<span class="hljs-keyword">if</span> (test2.joinable())
+    test2.join();
+</code></pre>
+<p>...<br>
+Đến đây tạm thời kết thúc phần 1: Các bạn đã hiểu cơ bản về các khái niệm khởi tạo, sử dụng thread. Trong phần tiếp theo chúng ta sẽ lần lượt về Thread ID, name space, Concurrent , mutex... Và các cách quản lý thread trong Android/ IOS.</p>
+</div><!----><!----></div></div><div class="col-md-3 hidden-lg-down flexbox"><div class="post-sidebar flexbox"><div class="js-sidebar"><div class="sidebar-sticky sidebar-content-wrapper" style="transform: translateY(2328px);"><div class="sidebar-content"><div class="user-card bottomLine"><div class="user-info-row"><div class="user-avatar"><a href="https://viblo.asia/u/kienvt" class="avatar"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/mm.png" srcset="https://viblo.asia/images/mm.png 1x, https://viblo.asia/images/mm.png 2x"></a></div><div class="user-name"><a href="https://viblo.asia/u/kienvt" class=""><span>Vu Trung Kien</span></a><div><span>@kienvt</span></div></div></div><div class="user-info-row"><div class="user-action"><div class="subscribe"><button class="btn btn-full-width btn-small-padding btn-medium-border btn-white">
+                    Follow
+                </button></div></div><!----><div class="user-stats"><span data-tooltipped="" aria-describedby="tippy-tooltip-6" data-original-title="Reputation"><i aria-hidden="true" class="fa fa-star"></i> 118
+            </span><span data-tooltipped="" aria-describedby="tippy-tooltip-7" data-original-title="Followers"><i aria-hidden="true" class="fa fa-user-plus"></i> 5
+            </span><span data-tooltipped="" aria-describedby="tippy-tooltip-8" data-original-title="Posts"><i aria-hidden="true" class="fa fa-pencil"></i> 13
+            </span><!----><!----></div></div></div><div class="post-clip-widget"><div class="subscribe"><button class="btn btn-primary full-width no-border-radius"><i aria-hidden="true" class="fa fa-paperclip mr-05"></i><span class="text-uppercase">Clip this post</span></button></div><div class="subscribers-preview d-flex align-items-center"><div class="u-sm-avatar" data-tooltipped="" aria-describedby="tippy-tooltip-9" data-original-title="Quoc Nguyen"><a href="https://viblo.asia/u/quocnb" class="avatar"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/1268545c-e972-4e6d-9c05-57333533257e.jpg" srcset="https://viblo.asia/uploads/avatar/1268545c-e972-4e6d-9c05-57333533257e.jpg 1x, https://viblo.asia/uploads/avatar-retina/1268545c-e972-4e6d-9c05-57333533257e.jpg 2x"></a></div><div class="u-sm-avatar" data-tooltipped="" aria-describedby="tippy-tooltip-10" data-original-title="Nguyễn Trọng Bình"><a href="https://viblo.asia/u/blcsntb" class="avatar"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/mm.png" srcset="https://viblo.asia/images/mm.png 1x, https://viblo.asia/images/mm.png 2x"></a></div><div class="u-sm-avatar" data-tooltipped="" aria-describedby="tippy-tooltip-11" data-original-title="Le Thanh Lam"><a href="https://viblo.asia/u/lamlt" class="avatar"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/mm.png" srcset="https://viblo.asia/images/mm.png 1x, https://viblo.asia/images/mm.png 2x"></a></div><div class="u-sm-avatar" data-tooltipped="" aria-describedby="tippy-tooltip-12" data-original-title="Quân Nguyễn"><a href="https://viblo.asia/u/tienquan1603" class="avatar"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/mm.png" srcset="https://viblo.asia/images/mm.png 1x, https://viblo.asia/images/mm.png 2x"></a></div></div></div><!----><div class="post-socialization"><a href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fviblo.asia%2Fp%2Flam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE&amp;title=L%C3%A0m%20quen%20v%E1%BB%9Bi%20Multithreading%20Trong%20C%2B%2B" target="_blank" class="link social-btn-circle facebook-btn"><i aria-hidden="true" class="fa fa-facebook"></i></a><a href="https://twitter.com/intent/tweet?url=https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE&amp;text=L%C3%A0m%20quen%20v%E1%BB%9Bi%20Multithreading%20Trong%20C%2B%2B&amp;hashtags=iOS%2CAndroid%2CC%2B%2B" target="_blank" class="link social-btn-circle twitter-btn"><i aria-hidden="true" class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=https%3A%2F%2Fviblo.asia%2Fp%2Flam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE" target="_blank" class="link social-btn-circle google-btn"><i aria-hidden="true" class="fa fa-google-plus"></i></a></div><div class="post-index"><div class="section-title-line"><h4 class="text-uppercase">Index</h4><hr class="filler-line"></div><ul id="markdown-toc" class="post-toc nav"><li class="nav-item index-item-level-1"><a href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE#multithreading-da-luong-la-gi-0" class="post-toc-link nav-link">Multithreading (đa luồng) là gì?</a></li><li class="nav-item index-item-level-1"><a href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE#how-to-create-a-thread-1" class="post-toc-link nav-link">How to create a thread?</a></li><li class="nav-item index-item-level-1"><a href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE#join-threads-2" class="post-toc-link nav-link active">Join threads</a></li><li class="nav-item index-item-level-1"><a href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE#joinable-and-not-joinable-threads-3" class="post-toc-link nav-link">Joinable and not Joinable threads</a></li><li class="nav-item index-item-level-1"><a href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE#detaching-thread-4" class="post-toc-link nav-link">Detaching thread</a></li><li class="nav-item index-item-level-1"><a href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE#initializing-thread-with-an-object-5" class="post-toc-link nav-link">Initializing thread with an object</a></li><li class="nav-item index-item-level-1"><a href="https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE#passing-arguments-to-thread-6" class="post-toc-link nav-link">Passing arguments to thread</a></li></ul></div></div><div class="resize-sensor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: 0s; width: 100000px; height: 100000px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div></div></div><!----></div></div></div></div><div class="tag-promo py-1 text-center"><span class="h4 word-break">Have problems with <u>iOS, Android or C++</u>?<a href="https://viblo.asia/questions" class="text-bold"> Ask on Viblo »</a></span></div></div><div class="grey-bg"><div class="container py-2"><div class="post-section"><div class="related-posts-widget pb-2"><h3 class="post-section-title"><strong>Related</strong></h3><div class="related-posts-box"><div class="item"><div class="post-card card card-block"><h1 class="post-card-title"><a href="https://viblo.asia/p/custom-toast-notification-tao-toast-giong-giao-dien-cua-push-notification-Qbq5Qq8G5D8" class=""><!----><span>
+                Custom Toast Notification (Tạo toast giống giao diện của push notification)
+            </span></a></h1><div class="post-card-author mb-05"><a href="https://viblo.asia/u/vtabk2" class="secondary-link">
+            Vu Tuan Anh
+        </a></div><div class="d-flex"><div class="post-stats"><span class="stats-item mr-05" data-tooltipped="" aria-describedby="tippy-tooltip-13" data-original-title="Views"><i aria-hidden="true" class="fa fa-eye"></i> 1048</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-14" data-original-title="Clips"><i aria-hidden="true" class="fa fa-paperclip"></i> 5</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-15" data-original-title="Comments"><i aria-hidden="true" class="fa fa-comments"></i> 0</span></div><div class="points ml-05" data-tooltipped="" aria-describedby="tippy-tooltip-16" data-original-title="Score"><div class="carets"><i aria-hidden="true" class="fa fa-caret-up"></i><i aria-hidden="true" class="fa fa-caret-down"></i></div><span class="text-muted">4</span></div></div></div></div><div class="item"><div class="post-card card card-block"><h1 class="post-card-title"><a href="https://viblo.asia/p/android-o-nhung-cai-moi-ma-lap-trinh-vien-can-biet-gDVK2aAn5Lj" class=""><!----><span>
+                Android O – Những Cái Mới Mà Lập Trình Viên Cần Biết
+            </span></a></h1><div class="post-card-author mb-05"><a href="https://viblo.asia/u/yellowcode.books" class="secondary-link">
+            Yellow Code
+        </a></div><div class="d-flex"><div class="post-stats"><span class="stats-item mr-05" data-tooltipped="" aria-describedby="tippy-tooltip-17" data-original-title="Views"><i aria-hidden="true" class="fa fa-eye"></i> 861</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-18" data-original-title="Clips"><i aria-hidden="true" class="fa fa-paperclip"></i> 4</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-19" data-original-title="Comments"><i aria-hidden="true" class="fa fa-comments"></i> 2</span></div><div class="points ml-05" data-tooltipped="" aria-describedby="tippy-tooltip-20" data-original-title="Score"><div class="carets"><i aria-hidden="true" class="fa fa-caret-up"></i><i aria-hidden="true" class="fa fa-caret-down"></i></div><span class="text-muted">7</span></div></div></div></div><div class="item"><div class="post-card card card-block"><h1 class="post-card-title"><a href="https://viblo.asia/p/rxjava-2-va-retrofit-trong-ung-dung-android-Qbq5QqdE5D8" class=""><!----><span>
+                RxJava 2 và Retrofit trong ứng dụng Android
+            </span></a></h1><div class="post-card-author mb-05"><a href="https://viblo.asia/u/huyquyet" class="secondary-link">
+            Nguyen Huy Quyet
+        </a></div><div class="d-flex"><div class="post-stats"><span class="stats-item mr-05" data-tooltipped="" aria-describedby="tippy-tooltip-21" data-original-title="Views"><i aria-hidden="true" class="fa fa-eye"></i> 564</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-22" data-original-title="Clips"><i aria-hidden="true" class="fa fa-paperclip"></i> 1</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-23" data-original-title="Comments"><i aria-hidden="true" class="fa fa-comments"></i> 0</span></div><div class="points ml-05" data-tooltipped="" aria-describedby="tippy-tooltip-24" data-original-title="Score"><div class="carets"><i aria-hidden="true" class="fa fa-caret-up"></i><i aria-hidden="true" class="fa fa-caret-down"></i></div><span class="text-muted">2</span></div></div></div></div><div class="item"><div class="post-card card card-block"><h1 class="post-card-title"><a href="https://viblo.asia/p/cach-viet-mot-singleton-sao-cho-dung-trong-lap-trinh-ios-voi-swift-07LKXYveZV4" class=""><!----><span>
+                Cách viết một Singleton sao cho đúng trong lập trình IOS với Swift
+            </span></a></h1><div class="post-card-author mb-05"><a href="https://viblo.asia/u/tienbm92" class="secondary-link">
+            Bùi Minh Tiến
+        </a></div><div class="d-flex"><div class="post-stats"><span class="stats-item mr-05" data-tooltipped="" aria-describedby="tippy-tooltip-25" data-original-title="Views"><i aria-hidden="true" class="fa fa-eye"></i> 487</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-26" data-original-title="Clips"><i aria-hidden="true" class="fa fa-paperclip"></i> 0</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-27" data-original-title="Comments"><i aria-hidden="true" class="fa fa-comments"></i> 0</span></div><div class="points ml-05" data-tooltipped="" aria-describedby="tippy-tooltip-28" data-original-title="Score"><div class="carets"><i aria-hidden="true" class="fa fa-caret-up"></i><i aria-hidden="true" class="fa fa-caret-down"></i></div><span class="text-muted">0</span></div></div></div></div></div></div><div class="related-posts-widget pb-2"><h3 class="post-section-title"><strong>More from Vu Trung Kien</strong></h3><div class="related-posts-box"><div class="item"><div class="post-card card card-block"><h1 class="post-card-title"><a href="https://viblo.asia/p/lam-quen-voi-multithreading-p2-AQ3vVka1RbOr" class=""><!----><span>
+                Làm quen với Multithreading (P2)
+            </span></a></h1><div class="post-card-author mb-05"><a href="https://viblo.asia/u/kienvt" class="secondary-link">
+            Vu Trung Kien
+        </a></div><div class="d-flex"><div class="post-stats"><span class="stats-item mr-05" data-tooltipped="" aria-describedby="tippy-tooltip-29" data-original-title="Views"><i aria-hidden="true" class="fa fa-eye"></i> 486</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-30" data-original-title="Clips"><i aria-hidden="true" class="fa fa-paperclip"></i> 1</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-31" data-original-title="Comments"><i aria-hidden="true" class="fa fa-comments"></i> 3</span></div><div class="points ml-05" data-tooltipped="" aria-describedby="tippy-tooltip-32" data-original-title="Score"><div class="carets"><i aria-hidden="true" class="fa fa-caret-up"></i><i aria-hidden="true" class="fa fa-caret-down"></i></div><span class="text-muted">0</span></div></div></div></div><div class="item"><div class="post-card card card-block"><h1 class="post-card-title"><a href="https://viblo.asia/p/sending-operations-to-multiple-threads-5y8Rr68VRob3" class=""><!----><span>
+                Sending Operations to Multiple Threads
+            </span></a></h1><div class="post-card-author mb-05"><a href="https://viblo.asia/u/kienvt" class="secondary-link">
+            Vu Trung Kien
+        </a></div><div class="d-flex"><div class="post-stats"><span class="stats-item mr-05" data-tooltipped="" aria-describedby="tippy-tooltip-33" data-original-title="Views"><i aria-hidden="true" class="fa fa-eye"></i> 178</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-34" data-original-title="Clips"><i aria-hidden="true" class="fa fa-paperclip"></i> 1</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-35" data-original-title="Comments"><i aria-hidden="true" class="fa fa-comments"></i> 0</span></div><div class="points ml-05" data-tooltipped="" aria-describedby="tippy-tooltip-36" data-original-title="Score"><div class="carets"><i aria-hidden="true" class="fa fa-caret-up"></i><i aria-hidden="true" class="fa fa-caret-down"></i></div><span class="text-muted">0</span></div></div></div></div><div class="item"><div class="post-card card card-block"><h1 class="post-card-title"><a href="https://viblo.asia/p/android-material-design-specification-l5XRBVVmRqPe" class=""><!----><span>
+                Android Material Design Specification!
+            </span></a></h1><div class="post-card-author mb-05"><a href="https://viblo.asia/u/kienvt" class="secondary-link">
+            Vu Trung Kien
+        </a></div><div class="d-flex"><div class="post-stats"><span class="stats-item mr-05" data-tooltipped="" aria-describedby="tippy-tooltip-37" data-original-title="Views"><i aria-hidden="true" class="fa fa-eye"></i> 551</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-38" data-original-title="Clips"><i aria-hidden="true" class="fa fa-paperclip"></i> 2</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-39" data-original-title="Comments"><i aria-hidden="true" class="fa fa-comments"></i> 3</span></div><div class="points ml-05" data-tooltipped="" aria-describedby="tippy-tooltip-40" data-original-title="Score"><div class="carets"><i aria-hidden="true" class="fa fa-caret-up"></i><i aria-hidden="true" class="fa fa-caret-down"></i></div><span class="text-muted">2</span></div></div></div></div><div class="item"><div class="post-card card card-block"><h1 class="post-card-title"><a href="https://viblo.asia/p/android-performance-tips-7eEREJWQMgNj" class=""><!----><span>
+                Android Performance Tips
+            </span></a></h1><div class="post-card-author mb-05"><a href="https://viblo.asia/u/kienvt" class="secondary-link">
+            Vu Trung Kien
+        </a></div><div class="d-flex"><div class="post-stats"><span class="stats-item mr-05" data-tooltipped="" aria-describedby="tippy-tooltip-41" data-original-title="Views"><i aria-hidden="true" class="fa fa-eye"></i> 130</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-42" data-original-title="Clips"><i aria-hidden="true" class="fa fa-paperclip"></i> 3</span><span class="stats-item mx-05" data-tooltipped="" aria-describedby="tippy-tooltip-43" data-original-title="Comments"><i aria-hidden="true" class="fa fa-comments"></i> 1</span></div><div class="points ml-05" data-tooltipped="" aria-describedby="tippy-tooltip-44" data-original-title="Score"><div class="carets"><i aria-hidden="true" class="fa fa-caret-up"></i><i aria-hidden="true" class="fa fa-caret-down"></i></div><span class="text-muted">2</span></div></div></div></div></div></div></div><div class="post-comments"><h3 class="mb-2"><strong>Comments</strong></h3><div class="comments-thread"><!----><div class="card card-block text-sm-center"><p class="card-text text-muted"><i aria-hidden="true" class="fa fa-comment-o"></i> No comments yet.
+        </p></div></div></div></div></div><div class="fixed-bottom hidden-lg-up"><div class="post-bottom-bar" data-v-abe152ec=""><div class="ratings" data-v-a72a7f90="" data-v-abe152ec=""><a class="vote" data-v-a72a7f90="" data-v-abe152ec=""><i aria-hidden="true" class="fa fa-arrow-up" data-v-a72a7f90="" data-v-abe152ec=""></i></a><div class="points" data-v-a72a7f90="" data-v-abe152ec="">0</div><a class="vote" data-v-a72a7f90="" data-v-abe152ec=""><i aria-hidden="true" class="fa fa-arrow-down" data-v-a72a7f90="" data-v-abe152ec=""></i></a></div><div class="sharings" data-v-abe152ec=""><div class="subscribe sharing-item clip" data-v-abe152ec=""><i aria-hidden="true" class="fa fa-paperclip" data-v-abe152ec=""></i></div><span class="text-muted" data-v-abe152ec="">•</span><a href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fviblo.asia%2Fp%2Flam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE&amp;title=L%C3%A0m%20quen%20v%E1%BB%9Bi%20Multithreading%20Trong%20C%2B%2B" class="sharing-item" data-v-abe152ec=""><i aria-hidden="true" class="fa fa-facebook" data-v-abe152ec=""></i></a><span class="text-muted" data-v-abe152ec="">•</span><a href="https://twitter.com/intent/tweet?url=https://viblo.asia/p/lam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE&amp;text=L%C3%A0m%20quen%20v%E1%BB%9Bi%20Multithreading%20Trong%20C%2B%2B&amp;hashtags=iOS%2CAndroid%2CC%2B%2B" class="sharing-item" data-v-abe152ec=""><i aria-hidden="true" class="fa fa-twitter" data-v-abe152ec=""></i></a><span class="text-muted" data-v-abe152ec="">•</span><a href="https://plus.google.com/share?url=https%3A%2F%2Fviblo.asia%2Fp%2Flam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE" class="sharing-item" data-v-abe152ec=""><i aria-hidden="true" class="fa fa-google-plus" data-v-abe152ec=""></i></a></div></div></div></div></div><footer class="footer bg-inverse"><div class="container pt-2"><div class="row"><div class="col-lg-3 col-sm-6 py-2"><div><h4 class="footer-header">Facebook</h4><div data-href="https://www.facebook.com/viblo.asia/" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" class="fb-page fb_iframe_widget" fb-xfbml-state="rendered" fb-iframe-plugin-query="adapt_container_width=true&amp;app_id=&amp;container_width=255&amp;hide_cover=false&amp;href=https%3A%2F%2Fwww.facebook.com%2Fviblo.asia%2F&amp;locale=en_US&amp;sdk=joey&amp;show_facepile=true&amp;small_header=false"><span style="vertical-align: bottom; width: 255px; height: 214px;"><iframe name="f16a03598033098" width="1000px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" title="fb:page Facebook Social Plugin" src="./Làm quen với Multithreading Trong C++ - Viblo_files/page.html" style="border: none; visibility: visible; width: 255px; height: 214px;" class=""></iframe></span></div></div></div><div class="col-lg-3 col-sm-6 offset-lg-1 py-2"><div><h4 class="footer-header">Hot authors</h4><ul class="hot-authors"><li><a href="https://viblo.asia/u/kiendinang" class="avatar" target="_blank"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/b324b42d-a096-4708-b430-1afc5b8642f0.png" srcset="https://viblo.asia/uploads/avatar/b324b42d-a096-4708-b430-1afc5b8642f0.png 1x, https://viblo.asia/uploads/avatar-retina/b324b42d-a096-4708-b430-1afc5b8642f0.png 2x"></a></li><li><a href="https://viblo.asia/u/pham.van.toan" class="avatar" target="_blank"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/957712ed-3131-494b-90ad-e44e687eeb4c.jpg" srcset="https://viblo.asia/uploads/avatar/957712ed-3131-494b-90ad-e44e687eeb4c.jpg 1x, https://viblo.asia/uploads/avatar-retina/957712ed-3131-494b-90ad-e44e687eeb4c.jpg 2x"></a></li><li><a href="https://viblo.asia/u/thangtd90" class="avatar" target="_blank"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/2fc6b751-3e6e-4324-b6bb-03ea83959b52.jpg" srcset="https://viblo.asia/uploads/avatar/2fc6b751-3e6e-4324-b6bb-03ea83959b52.jpg 1x, https://viblo.asia/uploads/avatar-retina/2fc6b751-3e6e-4324-b6bb-03ea83959b52.jpg 2x"></a></li><li><a href="https://viblo.asia/u/bienhoang" class="avatar" target="_blank"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/ed3994f1-3d57-440b-8b8a-8f1510e7fdcb.png" srcset="https://viblo.asia/uploads/avatar/ed3994f1-3d57-440b-8b8a-8f1510e7fdcb.png 1x, https://viblo.asia/uploads/avatar-retina/ed3994f1-3d57-440b-8b8a-8f1510e7fdcb.png 2x"></a></li><li><a href="https://viblo.asia/u/phuongnl" class="avatar" target="_blank"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/f7ac15eb-c619-407a-9d9e-49185ee409b1.png" srcset="https://viblo.asia/uploads/avatar/f7ac15eb-c619-407a-9d9e-49185ee409b1.png 1x, https://viblo.asia/uploads/avatar-retina/f7ac15eb-c619-407a-9d9e-49185ee409b1.png 2x"></a></li><li><a href="https://viblo.asia/u/nguyen.hong.nguyen" class="avatar" target="_blank"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/bcfc89c1-878a-48fc-9b49-86509e55c1fc.png" srcset="https://viblo.asia/uploads/avatar/bcfc89c1-878a-48fc-9b49-86509e55c1fc.png 1x, https://viblo.asia/uploads/avatar-retina/bcfc89c1-878a-48fc-9b49-86509e55c1fc.png 2x"></a></li><li><a href="https://viblo.asia/u/dinhhoanglong91" class="avatar" target="_blank"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/b46d20f1-6987-4562-bd17-df641c65ae80.jpg" srcset="https://viblo.asia/uploads/avatar/b46d20f1-6987-4562-bd17-df641c65ae80.jpg 1x, https://viblo.asia/uploads/avatar-retina/b46d20f1-6987-4562-bd17-df641c65ae80.jpg 2x"></a></li><li><a href="https://viblo.asia/u/tungtv" class="avatar" target="_blank"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/c75c5b15-b33b-4822-9bca-38a08e13f766.jpg" srcset="https://viblo.asia/uploads/avatar/c75c5b15-b33b-4822-9bca-38a08e13f766.jpg 1x, https://viblo.asia/uploads/avatar-retina/c75c5b15-b33b-4822-9bca-38a08e13f766.jpg 2x"></a></li><li><a href="https://viblo.asia/u/naa" class="avatar" target="_blank"><img src="./Làm quen với Multithreading Trong C++ - Viblo_files/44b8a0a2-c9ad-4bc9-9e90-518b15cd6e42.jpg" srcset="https://viblo.asia/uploads/avatar/44b8a0a2-c9ad-4bc9-9e90-518b15cd6e42.jpg 1x, https://viblo.asia/uploads/avatar-retina/44b8a0a2-c9ad-4bc9-9e90-518b15cd6e42.jpg 2x"></a></li></ul></div></div><div class="col-lg-4 offset-lg-1 py-2"><h4 class="footer-header">Resources</h4><div class="row"><div class="col-6"><ul class="resources"><li><a href="https://viblo.asia/newest" class="">Posts</a></li><li><a href="https://viblo.asia/questions" class="">Questions</a></li><li><a href="https://viblo.asia/videos" class="">Videos</a></li><li><a href="https://viblo.asia/tags" class="">Tags</a></li><li><a href="https://viblo.asia/authors" class="">Authors</a></li><li><a href="https://viblo.asia/helps" class="">Help</a></li></ul></div><div class="col-6"><ul class="resources"><li><a href="https://viblo.asia/terms" class="">Terms</a></li><li><a href="https://viblo.asia/rss" target="_blank"><i class="fa fa-rss"></i> RSS Feed</a></li><li><a href="https://viblo.asia/announcements/L4x5xQPrKBM" target="_blank">Browser extension</a></li><li><a href="https://viblo.asia/announcements/djeZ1agmZWz" target="_blank">Atom plugin</a></li><li><a href="https://viblo.asia/feedback">Feedback</a></li><li><a href="https://viblo.asia/faq" class="">FAQ</a></li></ul></div></div></div></div><div class="footer-divider"></div><div class="row py-3 sub-footer"><div class="col-md-6 d-flex align-items-center justify-content-md-start justify-content-center"><p class="copyright">
+                    © 2017 <b class="text-primary">Viblo</b>. All rights reserved.
+                </p></div></div></div><div class="feedback-popup"><!----></div></footer><!----><a id="top-btn" href="javascript:void(0);" class="hidden-sm-down top-btn-is-visible"><i aria-hidden="true" class="fa fa-arrow-up"></i></a></div></div><script type="text/javascript">window.__NUXT__={"layout":"default","data":[{}],"error":null,"state":{"config":{"analytics_track_id":"UA-88817199-1","atomPromotionUrl":"https:\u002F\u002Fviblo.asia\u002Fannouncements\u002FdjeZ1agmZWz","extensionPromotionUrl":"https:\u002F\u002Fviblo.asia\u002Fannouncements\u002FL4x5xQPrKBM","banner":{"url":"https:\u002F\u002Fawesome-academy.com\u002Fkhoa-hoc\u002Flap-trinh-ruby?utm_source=viblo&utm_medium=banner&utm_campaign=awa","img":"https:\u002F\u002Fviblo.asia\u002Fuploads\u002Ffull\u002Fa3b4eba8-a172-4f87-b7f8-a68853eaba66.png","bgColor":"#ffffff","height":"168"}},"announcements":{"indicator":0,"items":[],"processing":false},"auth":{"user":null,"guest":true},"commentsList":{"comments":{},"pagination":{}},"currentPost":{"post":{"id":4761,"slug":"qm6RWQYXGeJE","user_id":83,"contents":"Dạo này loanh quanh nghe thấy từ multipe thread hơi nhiều. Từ những bài seminar đến trong project hiện tại cũng có nhiều vấn đề liên quan. Về cơ bản mình cũng không phải cao thủ gì, tuỳ nhiên cũng muốn lọ mọ 1 chút gọi là góp vui :D.\nMình làm về mobile, chủ yếu là 2 mảng Android + IOS. Nên đương nhiên là dù có viết gì, tìm hiểu cái gì thì mục đích chính vẫn là phục vụ cho 2 nền tảng này. Và về cơ bản thì thằng nào cũng có cái gốc gác từ thằng C, vì thế quyết định chiến từ gốc lên cho máu.\nĐáng lẽ ra thì phải viết về posix threads Bởi nó mới là thằng phục vụ chính cho các platform. Tuy nhiên code C thì có vẻ khó đọc hơn C++, hơn nữa Ubuntu với Mac là đủ để demo, mà về cơ bản thì cơ chế của nó cũng vậy. Khi các bạn đọc hiểu được std:thread thì pThread cũng hoàn toàn có các hàm tương ứng. Kỳ sau sẽ giải thích rõ hơn về vấn đề này.\n\n# Multithreading (đa luồng) là gì?\n\nTrước hết chúng ta cùng tìm hiểu xem MultiThread là gì? Về cơ bản Multi Thread là một khả năng của một nền tảng (hệ điều hành, máy ảo vv) hoặc các ứng dụng để tạo ra một quá trình bao gồm nhiều Thread được thực thi. Một Thread thực hiện là chuỗi nhỏ nhất của hướng dẫn lập trình có thể được quản lý một cách độc lập bởi một lscheduler . Những Thread có thể chạy song song và nó có thể làm tăng hiệu quả của chương trình.\n\nTrong các hệ thống đa lõi và đa xử lý thì đa luồng tức là các thread được thực hiện cùng lúc trên lõi hoặc bộ vi xử lý khác nhau.\n\nĐối với hệ thống lõi đơn thì đa luồng chia thời gian giữa các thread. System sẽ gửi 1 số lượng nhất định các hướng dẫn từ mỗi Thread để xử lý. Các Thread không được thực hiện đồng thời. System chỉ mô phỏng thực hiện đồng thời của chúng. Tính năng này của System được gọi là đa luồng.\n\nMultithreading được sử dụng khi thực hiện song song 1 số nhiệm vụ dẫn đến việc tận dụng hiệu quả hơn các tài nguyên của hệ thống.\n\nTrong C++11 được xây dưng header thread.h để tạo ra các multithreaded C++ programs.\n\n# How to create a thread?\n\nĐầu tiên dĩ nhiên cần include header thread vào class.\n\n```C_Cpp\n#include \u003Cthread\u003E\n```\n\nKhi muốn khởi tạo 1 thread, bạn tạo 1 thread object:\n\n```C_Cpp\nthread t_empty;\n```\n\nNhư bạn thấy, hàm khởi tạo mặc định của thread class được sử dụng. Chúng ta không chuyền bất cứ 1 thông tin nào vào thread. Tức là không có gì được chạy trong thread này. Chúng ta phải khởi tạo thread. Nó có thể được hoàn thành bằng cách khác.\nKhi bạn tạo 1 thread, bạn có thể truyền 1 con trỏ hàm vào khởi tạo của nó. 1 thread được khởi tạo, function sẽ bắt đầu chạy, nó chạy trong 1 thread riêng biệt:\n\n```C_Cpp\n#include \u003Ciostream\u003E\n#include \u003Cthread\u003E\nusing namespace std;\nvoid threadFunc()\n{\n\tcout \u003C\u003C \"Welcome to Multithreading\" \u003C\u003C endl;\n\n}\nint main()\n{\n\u002F\u002Ftruyền 1 function tới thread\n    thread funcTest1(threadFunc);\n}\n```\n\nBạn có thể thử chạy đoạn code trên, biên dịch không có vấn đề gì, tuy nhiên bạn sẽ lập tức đối mặt với 1 runtime error: WHYYYYYY?\n\nThực tế thì câu trả lời khá đơn giản: Main thread tạo 1 thread mới là funcTest1 với paramaters threadFunc. Main thread không đợi funcTes1 huỷ. Nó tiếp tục hoạt động và sẽ kết thúc, nhưng funcTest1 vẫn chạy. Nó sẽ dẫn đễn lỗi. TẤT CẢ CÁC THREAD PHẢI HUỶ TRƯỚC KHI MAIN THREAD HUỶ.\nVậy làm các nào khắc phục vấn đề này?????\n\n# Join threads\n\nThread class cung cấp method join(), hàm này chỉ return khi tất cả các thread kết thúc, điều đó có nghĩa là main thread sẽ đợi đến khi tất cả các thread con hoàn thành công việc của nó.\nAdd thêm đoạn call hàm joind vào sample trên và chạy lại\n\n```C_Cpp\n\u002F\u002Ftruyền 1 function tới thread\nthread funcTest1(threadFunc);\n\u002F\u002Fmain sẽ block đến khi funcTest1 kết thúc\nfuncTest1.join();\n```\n\nBây giờ khi run lại chương trình sẽ không còn lỗi nữa (ngon)\n\n# Joinable and not Joinable threads\n\nSau khi hàm join return, thread trở lên không thể join lại. 1 joinable thread là 1 thread mà đại diện cho 1 execution mà chưa join.\n\n1 thread không là joinable khi nó được khởi tạo mặc định hoặc được moved\u002Fassigned tới 1 thread khác hoặc joind hoặc detach hàm đã được họi\nNot joinable thread có thể huỷ 1 cách an toàn.\nHàm joinable để checks thread có là joinable thread hay không.\n\n```C_Cpp\nbool joinable()\n```\n\nNên sử dụng hàm này trước khi call hàm join();\n\nThis function returns true if the thread is joinable and false otherwise. It’s better to check if the thread is joinable before join() function is called:\n\n```C_Cpp\n\u002F\u002Ftruyền 1 function tới thread\nthread funcTest1(threadFunc);\n\u002F\u002Fcheck if thread is joinable\nif (funcTest1.joinable())\n{\n\u002F\u002Fmain is blocked until funcTest1 is not finished\n    funcTest1.join();\n}\n```\n\n# Detaching thread\n\nNhư đã nhắc ở trên, thread trở thành not joinable sau khi hàm detach được gọi.\n\n```C_Cpp\nvoid detach()\n```\n\nHàm này tách 1 thread từ 1 thread cha, nó cho phép thread cha và thread con được chạy ngay lập tức từ cái còn lại. Sau khi call detach functon, các thread sẽ không đồng bộ trong bất kỳ cách nào.\n\n```C_Cpp\n\u002F\u002Fdetach funcTest1 from main thread\nfuncTest1.detach();\nif (funcTest1.joinable())\n{\n\t\u002F\u002Fmain is blocked until funcTest1 is not finished\n\tfuncTest1.join();\n}\nelse\n{\n\tcout \u003C\u003C \"functTest1 is detached\" \u003C\u003C endl;\n}\n```\n\nBạn sẽ nhận thấy mainthread không đợi các thread con bị huỷ!\n\n# Initializing thread with an object\n\nBạn có thể khởi tạo thread không chỉ với 1 function mà có thể dùng với 1 object hoặc 1 function của class.\n\n```C_Cpp\nclass myFunctor\n{\npublic:\n\tvoid operator()()\n\t{\n\t\tcout \u003C\u003C \"This is my function object\" \u003C\u003C endl;\n\t}\n};\n```\n\nBây giờ bạn có thể khởi tạo thread bằng cách truyền object của class myFunctor vào hàm khởi tạo của thread:\n\n```C_Cpp\nmyFunctor myFunc;\nthread functorTest(myFunc);\nif (functorTest.joinable())\nfunctorTest.join();\n```\n\nNếu bạn muốn khởi tạo thread với 1 public function của class, bạn phải định nghĩa function và truyền object của class định nghĩa function đó:\n\n```C_Cpp\nvoid publicFunction()\n{\n\tcout \u003C\u003C \"public function of myFunctor class is called\" \u003C\u003C endl;\n}\n```\n\nBây giờ có thể khởi tạo thread với hàm publicFunction của myFunctor class:\n\n```C_Cpp\nmyFunctor myFunc;\n\u002F\u002Finitializing thread with member function of myFunctor class\nthread functorTest(&myFunctor::publicFunction,myFunc);\nif (functorTest.joinable())\n\tfunctorTest.join();\n```\n\n# Passing arguments to thread\n\nTrong ví dụ trên chúng ta chỉ sử dụng hàm và đối tượng mà không phải truyền thêm các argyments vào các hàm và object.\nChúng ta có thể sử dụng function vớ các paramaters cho khác hàm khởi tạo thread. Vd:\n\n```C_Cpp\nvoid printSomeValues(int val, char* str, double dval)\n{\n\tcout \u003C\u003C val \u003C\u003C \" \" \u003C\u003C str \u003C\u003C\" \" \u003C\u003C dval \u003C\u003C endl;\n\n}\n```\n\nCó thruyền pointer tới function. Để truyền các arguments Để thấy function này có 3 arguments. Nếu bạn muốn khởi tạo với function này, trước hết bạn phải truyền con trỏ tới hàm.\n\n```JSON\nchar* str = \"Hello\";\n\u002F\u002F5, str and 3.2 are passed to printSomeValues function\nthread paramPass(printSomeValues, 5, str, 3.2);\nif (paramPass.joinable())\nparamPass.join();\n```\n\nKhi bạn khởi tạo 1 thread với 1 object có params, chúng ta phải add list các param tương ứng vào.\nWhen you want to initialize a thread with an object with parameters, we have to add corresponding parameter list to the overloading version of operator ():\n\n```C_Cpp\nclass myFunctorParam\n{\npublic:\n\tvoid operator()(int* arr, int length)\n\t{\n\t\tcout \u003C\u003C \"An array of length \" \u003C\u003C length \u003C\u003C \"is passed to thread\" \u003C\u003C endl;\n\t\tfor (int i = 0; i != length; ++i)\n\t\t\tcout \u003C\u003C arr[i] \u003C\u003C \" \" \u003C\u003C endl;\n\t\tcout \u003C\u003C endl;\n\t}\n};\n```\n\nBạn có thể thấy, operator () có 2 paramaters:\n\n```C_Cpp\nvoid operator()(int* arr, int length)\n```\n\nKhởi tạo thread với 1 object trong trường hợp này giống như sử dụng hàm với các paramater:\n\n```C_Cpp\n\u002F\u002Fthese parameters will be passed to thread\nint arr[5] = { 1, 3, 5, 7, 9 };\nmyFunctorParam objParamPass;\nthread test(objParamPass, arr, 5);\nif (test.joinable())\n\ttest.join();\n```\n\nCó thể sử dụng 1 hàm của class như params của thread. Add 1 public function vào  myFunctorParam class:\n\n```C_Cpp\nvoid changeSign(int* arr, int length)\n{\n\tcout \u003C\u003C \"An arrray of length \" \u003C\u003C length \u003C\u003C \"is passed to thread\" \u003C\u003C endl;\n\tfor (int i = 0; i != length; ++i)\n\t\tcout \u003C\u003C arr[i] \u003C\u003C \" \";\n\tcout \u003C\u003C \"Changing sign of all elements of initial array\" \u003C\u003C endl;\n\tfor (int i = 0; i != length; ++i)\n\t{\n\t\tarr[i] *= -1;\n\t\tcout \u003C\u003C arr[i] \u003C\u003C \" \";\n\t}\n}\n```\n\nTruyền argument vào member function:\n\n```C_Cpp\nint arr2[5] = { -1, 3, 5, -7, 0 };\n\u002F\u002Finitialize thread with member function\nthread test2(&myFunctorParam::changeSign, &objParamPass, arr2, 5);\nif (test2.joinable())\n\ttest2.join();\n```\n\n...\nĐến đây tạm thời kết thúc phần 1: Các bạn đã hiểu cơ bản về các khái niệm khởi tạo, sử dụng thread. Trong phần tiếp theo chúng ta sẽ lần lượt về Thread ID, name space, Concurrent , mutex... Và các cách quản lý thread trong Android\u002F IOS.\n\n","seo":{"image":{"width":1200,"height":628,"url":"https:\u002F\u002Fapi.viblo.asia\u002F"},"description":"Dạo này loanh quanh nghe thấy từ multipe thread hơi nhiều. Từ những bài seminar đến trong project hiện tại cũng có nhiều vấn đề liên quan. Về cơ bản mình cũng không phải cao thủ gì, tuỳ nhiên cũng muốn lọ mọ 1 chút gọi là góp vui :D.. Mình làm về mobile, chủ yếu là 2 mảng Android + IOS. Nên đương nhiên là dù có viết gì, tìm hiểu cái gì thì mục đích chính vẫn là phục vụ cho 2 nền tảng này. Và về cơ bản thì thằng nào cũng có cái gốc gác từ thằng C, vì thế quyết định chiến từ gốc lên cho máu.. Đáng lẽ ra thì phải viết về posix threads Bởi nó mới là thằng phục vụ chính cho các platform. Tuy nhiên code C thì có vẻ khó đọc hơn C++, hơn nữa Ubuntu với Mac là đủ để demo, mà về cơ bản thì cơ chế của...","locale_code":"vi_VN","modified_time":"2017-10-14T12:00:05+07:00","published_time":"2016-05-29T15:10:22+07:00"},"tags":{"data":[{"slug":"ios","name":"iOS","primary":false},{"slug":"android","name":"Android","primary":false},{"slug":"cpp","name":"C++","primary":false}]},"current_revision":8405,"category_id":null,"video_id":null,"video_type":null,"slide_url":null,"can_propose":null},"related":null,"fetchedAt":"2017-10-14 12:24:14","invalidated":true,"subscribers":[],"series":null,"proposals":[],"comments":{"byId":{},"threads":{"root":[]},"loading":false}},"entities":{"posts":{"all":{"4761":{"id":4761,"slug":"qm6RWQYXGeJE","title":"Làm quen với Multithreading Trong C++","transliterated":"lam-quen-voi-multithreading-trong-c","user_id":83,"canonical_url":"https:\u002F\u002Fviblo.asia\u002Fp\u002Flam-quen-voi-multithreading-trong-c-qm6RWQYXGeJE","system":null,"status":"public","is_published":true,"promoted":false,"trending":false,"thumbnail_url":null,"is_video":false,"views_count":1487,"clips_count":4,"comments_count":0,"clipped":false,"points":0,"rated_value":null,"updated_at":"2017-10-14 12:00:05","published_at":"2016-05-30 02:36:57","trend_at":null}}},"questions":{"all":{}},"tags":{"all":{}},"users":{"all":{"83":{"id":83,"username":"kienvt","name":"Vu Trung Kien","avatar":["https:\u002F\u002Fviblo.asia\u002Fimages\u002Fmm.png","https:\u002F\u002Fviblo.asia\u002Fimages\u002Fmm.png"],"following":false,"reputation":118,"followers_count":5,"posts_count":13,"questions_count":0,"answers_count":0}}}},"feed":{"preload":{"counts":false},"counts":{},"questions":[],"posts":[],"pagination":{"current_page":1,"total_pages":0},"tab":"newest","feedType":"newest","loaded":false},"notifications":{"data":[],"batch":0,"lastBatch":1,"unread":0},"profile":{"profile":null},"promoted":{"week":{"qa":[],"normal":[]},"month":{"qa":[],"normal":[]},"posts":[],"tags":[],"topQATags":[],"invalidated":false,"currentSharingId":null},"questionView":{"question":null,"answers":{"byId":{},"all":[]},"fetchedAt":null,"subscribers":[],"invalidated":true,"comments":{"byId":{}}},"questionsList":{"byId":{},"current":[],"pagination":{}},"registration":{},"seriesView":{"series":{},"posts":[],"requests":[]},"settings":{"perPage":20,"layout":"simple"},"subscriptions":{},"tagView":{"posts":{"byId":{},"current":[],"pagination":{}}}},"serverRendered":true};</script><script src="./Làm quen với Multithreading Trong C++ - Viblo_files/manifest.a939af43c1780d485b20.js.tải xuống" defer=""></script><script src="./Làm quen với Multithreading Trong C++ - Viblo_files/_post.128761e523d1718817aa.js.tải xuống" defer=""></script><script src="./Làm quen với Multithreading Trong C++ - Viblo_files/common.59417fa3cc00f2be4d6a.js.tải xuống" defer=""></script><script src="./Làm quen với Multithreading Trong C++ - Viblo_files/app.ca72fae92302ebf7d3e7.js.tải xuống" defer=""></script>
+  
+
+<div id="mini-toastr" class="mini-toastr"></div><div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./Làm quen với Multithreading Trong C++ - Viblo_files/18W0fzbK7xg.html" style="border: none;"></iframe></div></div></div></body></html>
